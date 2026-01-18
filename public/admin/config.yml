@@ -1,0 +1,26 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/img"
+public_folder: "/img"
+locale: "es"
+
+collections:
+  - name: "productos"
+    label: "👗 Productos"
+    folder: "src/content/productos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Nombre Producto", name: "title", widget: "string"}
+      - {label: "Precio (€)", name: "price", widget: "number", value_type: "float"}
+      - {label: "Estado del Stock", name: "stockStatus", widget: "select", options: ["En Stock", "Últimas Unidades", "Agotado"], default: "En Stock"}
+      - {label: "Imagen Principal", name: "image", widget: "image"}
+      - {label: "Foto Auxiliar 1 (Opcional)", name: "gallery1", widget: "image", required: false}
+      - {label: "Foto Auxiliar 2 (Opcional)", name: "gallery2", widget: "image", required: false}
+      - {label: "Foto Auxiliar 3 (Opcional)", name: "gallery3", widget: "image", required: false}
+      - {label: "Tallas", name: "sizes", widget: "select", multiple: true, options: ["XS","S","M","L","XL","XXL","Única"]}
+      - {label: "Colores", name: "colors", widget: "select", multiple: true, options: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Rosa", "Beige", "Amarillo", "Estampado", "Oro", "Plata"]}
+      - {label: "Descripción", name: "description", widget: "text"}
+      - {label: "Ocultar (Borrador)", name: "draft", widget: "boolean", default: false}

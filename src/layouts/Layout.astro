@@ -1,0 +1,172 @@
+---
+import Cart from '../components/Cart.astro';
+import WhatsAppBtn from '../components/WhatsAppBtn.astro';
+import CookieManager from '../components/CookieManager.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+    noindex?: boolean;
+    schema?: string; 
+}
+
+const { 
+    title, 
+    description = "Siempre Divinas, tienda online de ropa, calzado y complementos para mujer. Moda diaria, buena calidad y precios asequibles. Compra online fácil y segura.", 
+    image = "/img/logo.png", 
+    noindex = false,
+    schema
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com/';
+const logoUrl = new URL('/img/logo.png', siteUrl).toString();
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+        
+		<title>{title} | Siempre Divinas</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalURL} />
+        
+        {noindex ? (
+            <meta name="robots" content="noindex, nofollow" />
+        ) : (
+            <meta name="robots" content="index, follow" />
+        )}
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={new URL(image, siteUrl)} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Siempre Divinas" />
+        <meta property="og:locale" content="es_ES" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+        <script type="application/ld+json" set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Siempre Divinas",
+            "url": siteUrl,
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": `${siteUrl}?q={search_term_string}`,
+                "query-input": "required name=search_term_string"
+            }
+        })} />
+
+        <script type="application/ld+json" set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ClothingStore",
+            "name": "Siempre Divinas",
+            "image": logoUrl,
+            "@id": siteUrl,
+            "url": siteUrl,
+            "telephone": "+34681883707",
+            "email": "siempredivinas.moda@gmail.com",
+            "priceRange": "€",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Paseo Capa Negra 6, Port 13, 2°D",
+                "addressLocality": "Rivas Vaciamadrid",
+                "addressRegion": "Madrid",
+                "postalCode": "28522",
+                "addressCountry": "ES"
+            },
+            "founder": {
+                "@type": "Person",
+                "name": "Ana María Diaz Labella"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 40.35, 
+                "longitude": -3.53
+            },
+            "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+                ],
+                "opens": "10:00",
+                "closes": "20:00"
+            }
+        })} />
+
+        {schema && <script type="application/ld+json" set:html={schema} />}
+        
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+	</head>
+	
+    <body class="bg-white text-gray-900 flex flex-col min-h-screen font-sans">
+        
+        <header class="bg-white shadow-md sticky top-0 z-50 font-sans">
+            <nav class="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
+                
+                <div class="flex-1 hidden md:flex"></div>
+
+                <a href="/" class="flex-shrink-0 transform hover:scale-105 transition duration-500">
+                    <img src="/img/logo.png" alt="Siempre Divinas" class="h-16 w-auto md:h-24 drop-shadow-sm" />
+                </a>
+
+                <div class="flex-1 flex justify-end items-center gap-6">
+                    
+                    <div class="hidden md:flex items-center gap-8 font-medium text-gray-700 uppercase tracking-wider text-sm">
+                        <a href="/" class="hover:text-pink-600 transition relative group py-2">
+                            Inicio
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="/#catalogo" class="hover:text-pink-600 transition relative group py-2">
+                            Catálogo
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="/contacto" class="hover:text-pink-600 transition relative group py-2">
+                            Contacto
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                    </div>
+
+                    <button onclick="window.dispatchEvent(new Event('toggle-cart'))" class="relative group p-2 hover:bg-gray-100 rounded-full transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-800 group-hover:text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-count-badge absolute -top-1 -right-1 bg-pink-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden shadow-md border-2 border-white">0</span>
+                    </button>
+
+                </div>
+            </nav>
+        </header>
+
+        <slot />
+
+        <footer class="bg-black text-white py-10 mt-auto">
+            <div class="container mx-auto px-4 text-center">
+                <p class="font-serif text-xl mb-6">Siempre Divinas</p>
+                
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-400 mb-6">
+                    <a href="/legal/aviso-legal" class="hover:text-white transition">Aviso Legal</a>
+                    <a href="/legal/condiciones-compra" class="hover:text-white transition">Condiciones de Compra</a>
+                    <a href="/legal/politica-privacidad" class="hover:text-white transition">Privacidad</a>
+                    <a href="/legal/politica-cookies" class="hover:text-white transition">Cookies</a>
+                </div>
+                
+                <p class="text-xs text-gray-500">© 2026 Siempre Divinas | Rivas Vaciamadrid</p>
+            </div>
+        </footer>
+
+        <WhatsAppBtn />
+        <CookieManager />
+
+        <Cart />
+    </body>
+</html>

@@ -1,0 +1,224 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('productos');
+  return products.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+// Recuperamos el nuevo campo stockStatus (si no existe, por defecto es 'En Stock')
+const { title, price, description, image, sizes, colors, gallery1, gallery2, gallery3, stockStatus = 'En Stock' } = entry.data;
+
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com';
+const imageUrl = new URL(image, siteUrl).toString();
+const productUrl = new URL(Astro.url.pathname, siteUrl).toString();
+
+const schemaImages = [imageUrl];
+if (gallery1) schemaImages.push(new URL(gallery1, siteUrl).toString());
+if (gallery2) schemaImages.push(new URL(gallery2, siteUrl).toString());
+if (gallery3) schemaImages.push(new URL(gallery3, siteUrl).toString());
+
+// LÓGICA DE STOCK PARA GOOGLE (SCHEMA)
+const availabilitySchema = stockStatus === 'Agotado' 
+    ? "https://schema.org/OutOfStock" 
+    : "https://schema.org/InStock";
+
+const productSchema = JSON.stringify({
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": title,
+  "image": schemaImages,
+  "description": description,
+  "sku": entry.slug,
+  "brand": { "@type": "Brand", "name": "Siempre Divinas" },
+  "offers": {
+    "@type": "Offer",
+    "url": productUrl,
+    "priceCurrency": "EUR",
+    "price": price,
+    "availability": availabilitySchema,
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": { "@type": "Organization", "name": "Siempre Divinas" }
+  }
+});
+
+const allProducts = await getCollection('productos');
+const relatedProducts = allProducts.filter(p => p.slug !== entry.slug).slice(0, 3);
+
+// Colores para las etiquetas visuales
+const isAgotado = stockStatus === 'Agotado';
+const isLastUnits = stockStatus === 'Últimas Unidades';
+---
+
+<Layout title={`${title} | Siempre Divinas`} description={description} image={image} schema={productSchema}>
+  
+  <main class="container mx-auto px-4 py-12">
+    <nav class="text-sm text-gray-500 mb-8 flex items-center gap-2">
+      <a href="/" class="hover:text-pink-600">Inicio</a> <span>&gt;</span>
+      <a href="/#catalogo" class="hover:text-pink-600">Catálogo</a> <span>&gt;</span>
+      <span class="font-bold text-gray-900">{title}</span>
+    </nav>
+
+    <div class="grid md:grid-cols-2 gap-12">
+        <div class="space-y-4 relative">
+            
+            {isAgotado && (
+                <div class="absolute top-4 left-4 z-10 bg-red-600 text-white px-4 py-2 font-bold uppercase tracking-wider shadow-lg rounded">
+                    🚫 Agotado
+                </div>
+            )}
+            {isLastUnits && (
+                <div class="absolute top-4 left-4 z-10 bg-orange-500 text-white px-4 py-2 font-bold uppercase tracking-wider shadow-lg rounded animate-pulse">
+                    🔥 Últimas Unidades
+                </div>
+            )}
+
+            <img src={image} alt={title} class={`w-full rounded-lg shadow-lg object-cover aspect-[3/4] ${isAgotado ? 'opacity-75 grayscale' : ''}`} id="mainImage"/>
+            
+            <div class="grid grid-cols-4 gap-2">
+                <img src={image} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />
+                {gallery1 && <img src={gallery1} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+                {gallery2 && <img src={gallery2} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+                {gallery3 && <img src={gallery3} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+            </div>
+        </div>
+
+        <div>
+            <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">{title}</h1>
+            
+            <div class="flex items-center gap-4 mb-6">
+                <p class="text-3xl text-gold-600 font-bold">{price}€</p>
+                {isAgotado && <span class="text-red-600 font-bold text-sm uppercase border border-red-200 bg-red-50 px-2 py-1 rounded">Sin Stock</span>}
+                {isLastUnits && <span class="text-orange-500 font-bold text-sm uppercase border border-orange-200 bg-orange-50 px-2 py-1 rounded">¡Corre que vuelan!</span>}
+            </div>
+
+            <div class="prose text-gray-600 mb-8"><p>{description}</p></div>
+
+            {sizes && (
+                <div class="mb-6 product-option" data-type="talla">
+                    <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige tu talla:</label>
+                    <div class="flex gap-3 flex-wrap">
+                        {sizes.map(size => (
+                            <label class={`cursor-pointer ${isAgotado ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                <input type="radio" name="size" value={size} disabled={isAgotado} class="peer sr-only" />
+                                <div class="w-12 h-12 flex items-center justify-center border-2 border-gray-200 rounded-md font-bold text-gray-500 peer-checked:border-pink-brand peer-checked:text-pink-brand peer-checked:bg-pink-50 hover:border-gray-400 transition">{size}</div>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {colors && (
+                <div class="mb-8 product-option" data-type="color">
+                    <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige color:</label>
+                    <div class="flex gap-3 flex-wrap">
+                        {colors.map(color => (
+                            <label class={`cursor-pointer ${isAgotado ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                <input type="radio" name="color" value={color} disabled={isAgotado} class="peer sr-only" />
+                                <div class="px-4 py-2 border-2 border-gray-200 rounded-full font-medium text-gray-600 peer-checked:border-gold-600 peer-checked:text-gold-600 peer-checked:bg-yellow-50 hover:border-gray-400 transition">{color}</div>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* BOTÓN DE COMPRA NUEVO */}
+            {isAgotado ? (
+                <button disabled class="w-full bg-gray-400 text-white font-bold py-4 px-6 rounded-full cursor-not-allowed flex items-center justify-center gap-3">
+                    <span class="text-2xl">🚫</span> PRODUCTO AGOTADO
+                </button>
+            ) : (
+                <button id="add-to-cart-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-full shadow-lg flex items-center justify-center gap-3 transition transform hover:scale-[1.02]">
+                    <span class="text-2xl">🛍️</span> AÑADIR A LA CESTA
+                </button>
+            )}
+            
+            <div class="mt-4 flex gap-4 text-xs text-gray-500 justify-center">
+                <span class="flex items-center gap-1">✅ Envío 24/48h</span>
+                <span class="flex items-center gap-1">🔒 Pago Seguro</span>
+            </div>
+        </div>
+    </div>
+
+    {relatedProducts.length > 0 && (
+        <section class="mt-20 border-t pt-10">
+            <h3 class="text-2xl font-serif font-bold mb-6 text-center">También te puede gustar</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {relatedProducts.map(p => (
+                    <a href={`/productos/${p.slug}`} class="block group">
+                        <div class="overflow-hidden rounded-lg mb-2 relative">
+                            {p.data.stockStatus === 'Agotado' && <div class="absolute top-0 right-0 bg-red-600 text-white text-xs px-2 py-1 font-bold">AGOTADO</div>}
+                            {p.data.stockStatus === 'Últimas Unidades' && <div class="absolute top-0 right-0 bg-orange-500 text-white text-xs px-2 py-1 font-bold animate-pulse">ÚLTIMAS</div>}
+                            
+                            <img src={p.data.image} class="w-full aspect-[3/4] object-cover transition duration-500 group-hover:scale-110" />
+                        </div>
+                        <p class="font-bold group-hover:text-pink-brand transition">{p.data.title}</p>
+                        <p class="text-sm text-gold-600 font-bold">{p.data.price}€</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+    )}
+  </main>
+
+  <script define:vars={{ entry }}>
+    const btn = document.getElementById('add-to-cart-btn');
+    
+    if (btn) {
+        btn.addEventListener('click', () => {
+            // 1. Obtener valores de los inputs RADIO
+            const sizeInput = document.querySelector('input[name="size"]:checked');
+            const colorInput = document.querySelector('input[name="color"]:checked');
+            
+            // 2. Validaciones
+            const hasSizes = document.querySelector('.product-option[data-type="talla"]');
+            if (hasSizes && !sizeInput) { 
+                alert('⚠️ Por favor, selecciona una TALLA antes de añadir.'); 
+                return; 
+            }
+
+            const hasColors = document.querySelector('.product-option[data-type="color"]');
+            if (hasColors && !colorInput) { 
+                alert('⚠️ Por favor, selecciona un COLOR antes de añadir.'); 
+                return; 
+            }
+
+            // 3. Crear el objeto del producto
+            const sizeValue = sizeInput ? sizeInput.value : 'Única';
+            const colorValue = colorInput ? colorInput.value : 'Único';
+
+            const cartItem = {
+                id: entry.slug + '-' + sizeValue + '-' + colorValue, // ID único para diferenciar tallas
+                title: entry.data.title,
+                price: entry.data.price,
+                image: entry.data.image,
+                size: sizeValue,
+                color: colorValue,
+                quantity: 1
+            };
+
+            // 4. Guardar en LocalStorage
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Comprobar si ya existe para sumar cantidad
+            const existingItemIndex = cart.findIndex(item => item.id === cartItem.id);
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // 5. Avisar al carrito para que se actualice y se abra
+            window.dispatchEvent(new Event('cart-updated'));
+            window.dispatchEvent(new Event('toggle-cart'));
+        });
+    }
+  </script>
+</Layout>
