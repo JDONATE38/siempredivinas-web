@@ -20,19 +20,19 @@
     </span>
 </button>
 
-<div id="cookie-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0">
+<div id="cookie-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0" aria-labelledby="cookie-title" role="dialog" aria-modal="true">
     
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="cookie-panel">
         
         <div class="p-6 border-b border-gray-100 flex justify-between items-start">
             <div>
-                <h2 class="text-xl font-serif font-bold text-gray-900">Configuración de Privacidad</h2>
+                <h2 id="cookie-title" class="text-xl font-serif font-bold text-gray-900">Configuración de Privacidad</h2>
                 <p class="text-sm text-gray-500 mt-2">
                     Usamos cookies para mejorar tu experiencia. Puedes elegir cuáles aceptas.
                     <a href="/legal/politica-cookies" class="text-pink-600 underline hover:text-pink-800">Ver Política completa</a>.
                 </p>
             </div>
-            <button id="close-modal-x" class="text-gray-400 hover:text-gray-900">
+            <button id="close-modal-x" class="text-gray-400 hover:text-gray-900 p-2" aria-label="Cerrar panel de cookies">
                 ✖
             </button>
         </div>
@@ -47,10 +47,10 @@
                     </h3>
                     <p class="text-xs text-gray-500 mt-1">Esenciales para que la web funcione (carrito, seguridad).</p>
                 </div>
-                <div class="relative inline-flex items-center cursor-not-allowed opacity-60">
-                    <input type="checkbox" checked disabled class="sr-only peer">
+                <label class="relative inline-flex items-center cursor-not-allowed opacity-60">
+                    <input type="checkbox" checked disabled class="sr-only peer" aria-label="Cookies necesarias (siempre activas)">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                </div>
+                </label>
             </div>
 
             <div class="flex items-start justify-between gap-4">
@@ -59,7 +59,7 @@
                     <p class="text-xs text-gray-500 mt-1">Nos ayudan a saber cuánta gente visita la tienda (Google Analytics).</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="check-analytics" class="sr-only peer">
+                    <input type="checkbox" id="check-analytics" class="sr-only peer" aria-label="Activar cookies analíticas">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 hover:bg-gray-300 transition-colors"></div>
                 </label>
             </div>
@@ -70,7 +70,7 @@
                     <p class="text-xs text-gray-500 mt-1">Para mostrarte anuncios relevantes de nuestra ropa.</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="check-marketing" class="sr-only peer">
+                    <input type="checkbox" id="check-marketing" class="sr-only peer" aria-label="Activar cookies de marketing">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 hover:bg-gray-300 transition-colors"></div>
                 </label>
             </div>
@@ -99,14 +99,14 @@
     const trigger = document.getElementById('cookie-trigger');
     const closeX = document.getElementById('close-modal-x');
     
-    // CHECKBOXES
-    const checkAnalytics = document.getElementById('check-analytics') as HTMLInputElement;
-    const checkMarketing = document.getElementById('check-marketing') as HTMLInputElement;
+    // CHECKBOXES (Eliminado "as HTMLInputElement" para evitar errores si no usas TS estricto)
+    const checkAnalytics = document.getElementById('check-analytics');
+    const checkMarketing = document.getElementById('check-marketing');
 
     // FUNCIONES DE APERTURA/CIERRE
     function openModal() {
+        if(!overlay) return;
         overlay.classList.remove('hidden');
-        // Pequeño timeout para la animación de opacidad
         setTimeout(() => {
             overlay.classList.remove('opacity-0');
             panel.classList.remove('scale-95');
@@ -115,6 +115,7 @@
     }
 
     function closeModal() {
+        if(!overlay) return;
         overlay.classList.add('opacity-0');
         panel.classList.remove('scale-100');
         panel.classList.add('scale-95');
@@ -132,51 +133,53 @@
             timestamp: new Date().toISOString()
         };
         localStorage.setItem('cookie-consent', JSON.stringify(preferences));
-        
-        // AQUÍ ES DONDE SE ACTIVARÍAN LOS SCRIPTS REALES (Google Analytics, etc)
         console.log('Preferencias guardadas:', preferences);
-        
         closeModal();
     }
 
     // INICIALIZACIÓN
     const saved = localStorage.getItem('cookie-consent');
     if (!saved) {
-        // Si no hay nada guardado, mostrar modal al entrar (con un retraso de 2 seg)
         setTimeout(openModal, 2000);
     } else {
-        // Si ya guardó, cargar el estado de los interruptores
         const prefs = JSON.parse(saved);
-        checkAnalytics.checked = prefs.analytics;
-        checkMarketing.checked = prefs.marketing;
+        if(checkAnalytics) checkAnalytics.checked = prefs.analytics;
+        if(checkMarketing) checkMarketing.checked = prefs.marketing;
     }
 
     // EVENTOS
-    trigger.addEventListener('click', openModal);
-    closeX.addEventListener('click', closeModal);
+    if(trigger) trigger.addEventListener('click', openModal);
+    if(closeX) closeX.addEventListener('click', closeModal);
 
-    // 1. RECHAZAR TODO
-    document.getElementById('btn-reject-all').addEventListener('click', () => {
-        checkAnalytics.checked = false;
-        checkMarketing.checked = false;
-        saveConsent(false, false);
-    });
+    const btnReject = document.getElementById('btn-reject-all');
+    const btnAccept = document.getElementById('btn-accept-all');
+    const btnSave = document.getElementById('btn-save-prefs');
 
-    // 2. ACEPTAR TODO
-    document.getElementById('btn-accept-all').addEventListener('click', () => {
-        checkAnalytics.checked = true;
-        checkMarketing.checked = true;
-        saveConsent(true, true);
-    });
+    if(btnReject) {
+        btnReject.addEventListener('click', () => {
+            if(checkAnalytics) checkAnalytics.checked = false;
+            if(checkMarketing) checkMarketing.checked = false;
+            saveConsent(false, false);
+        });
+    }
 
-    // 3. GUARDAR SELECCIÓN
-    document.getElementById('btn-save-prefs').addEventListener('click', () => {
-        saveConsent(checkAnalytics.checked, checkMarketing.checked);
-    });
+    if(btnAccept) {
+        btnAccept.addEventListener('click', () => {
+            if(checkAnalytics) checkAnalytics.checked = true;
+            if(checkMarketing) checkMarketing.checked = true;
+            saveConsent(true, true);
+        });
+    }
 
-    // Cerrar si se hace clic fuera del panel (fondo oscuro)
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeModal();
-    });
+    if(btnSave) {
+        btnSave.addEventListener('click', () => {
+            saveConsent(checkAnalytics.checked, checkMarketing.checked);
+        });
+    }
 
+    if(overlay) {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+    }
 </script>
