@@ -68,7 +68,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 
         <script type="application/ld+json" set:html={JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "ClothingStore",
+            "@type": "OnlineStore",
             "name": "Siempre Divinas",
             "image": logoUrl,
             "@id": siteUrl,
@@ -76,14 +76,6 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
             "telephone": "+34681883707",
             "email": "siempredivinas.moda@gmail.com",
             "priceRange": "€",
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Paseo Capa Negra 6, Port 13, 2°D",
-                "addressLocality": "Rivas Vaciamadrid",
-                "addressRegion": "Madrid",
-                "postalCode": "28522",
-                "addressCountry": "ES"
-            },
             "founder": {
                 "@type": "Person",
                 "name": "Ana María Diaz Labella"
