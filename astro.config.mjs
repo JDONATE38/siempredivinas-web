@@ -4,6 +4,11 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://siempredivinas.com', // Esto lo cambiaremos luego si hace falta
+  site: 'https://siempredivinas.com',
   integrations: [tailwind(), sitemap()],
+  
+  // ESTA ES LA PARTE QUE SOLUCIONA EL ERROR:
+  build: {
+    inlineStylesheets: 'always'
+  }
 });
