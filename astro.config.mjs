@@ -9,6 +9,7 @@ export default defineConfig({
   
   // ESTA ES LA PARTE QUE SOLUCIONA EL ERROR:
   build: {
-    inlineStylesheets: 'always'
+    inlineStylesheets: 'always' // Pega el CSS directamente en el HTML
+  }
   }
 });

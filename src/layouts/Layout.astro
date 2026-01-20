@@ -29,6 +29,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+        <link rel="preload" as="image" href="/img/home-bg.webp" fetchpriority="high" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
         
@@ -205,7 +206,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 
         <Cart />
         
-        <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"defer> ></script>
+        <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer> ></script>
 
         <script>
             const btn = document.getElementById('mobile-menu-btn');
