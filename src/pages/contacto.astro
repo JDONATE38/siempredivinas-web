@@ -2,44 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Contacto | Siempre Divinas" description="Contacta con nosotros para cualquier duda sobre tallas, envíos o pedidos.">
-  <main class="container mx-auto px-4 py-20">
+<Layout title="Contacta con Nosotras">
+  <section class="max-w-4xl mx-auto py-20 px-4 text-center">
+    <h1 class="font-serif text-4xl md:text-5xl mb-8">Contacta con Nosotras</h1>
+    <p class="text-lg mb-12">¿Tienes dudas con tu talla o tu pedido? Estamos aquí para ayudarte.</p>
     
-    <div class="max-w-2xl mx-auto text-center">
-      <h1 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-gold-600">Contacta con Nosotras</h1>
-      <p class="text-gray-600 mb-12 text-lg">
-        ¿Tienes dudas con tu talla? ¿Quieres saber cuándo llega tu pedido? <br>
-        Estamos aquí para ayudarte. Escríbenos y te contestaremos volando.
-      </p>
-
-      <div class="bg-pink-50 p-10 rounded-3xl border border-pink-100 shadow-sm">
-        <h3 class="font-serif text-2xl font-bold mb-8 text-pink-brand">Información de Contacto</h3>
-        
-        <div class="space-y-8">
-          <div class="flex flex-col items-center gap-2">
-            <span class="text-3xl">📱</span>
-            <p class="text-sm font-bold uppercase tracking-widest text-gray-500">WhatsApp</p>
-            <a href="https://wa.me/34681883707" class="text-xl md:text-2xl font-medium hover:text-pink-600 transition">
-              681 88 37 07
-            </a>
-          </div>
-
-          <div class="h-px bg-pink-200 w-16 mx-auto"></div>
-
-          <div class="flex flex-col items-center gap-2">
-            <span class="text-3xl">📧</span>
-            <p class="text-sm font-bold uppercase tracking-widest text-gray-500">Email</p>
-            <a href="mailto:siempredivinas.moda@gmail.com" class="text-xl md:text-2xl font-medium hover:text-pink-600 transition break-all">
-              siempredivinas.moda@gmail.com
-            </a>
-          </div>
-        </div>
+    <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+      <div class="p-6 bg-pink-50 rounded-lg">
+        <h2 class="font-bold text-xl mb-2">WhatsApp</h2>
+        <p class="text-2xl">681 88 37 07</p>
       </div>
-
-      <p class="mt-12 text-gray-400 text-sm italic">
-        Horario de atención: Lunes a Viernes de 10:00 a 19:00
-      </p>
+      <div class="p-6 bg-pink-50 rounded-lg">
+        <h2 class="font-bold text-xl mb-2">Email</h2>
+        <p class="text-lg">siempredivinas.moda@gmail.com</p>
+      </div>
     </div>
-    
-  </main>
+  </section>
 </Layout>
