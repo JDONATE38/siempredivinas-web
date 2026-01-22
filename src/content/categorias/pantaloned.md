@@ -1,5 +1,5 @@
 ---
-title: PANTALONES
+title: Pantalones
 image: /img/1769118320569-1-.png
 order: 1
 ---
