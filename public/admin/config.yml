@@ -1,12 +1,26 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: JDONATE38/siempredivinas-web 
   branch: main
+  base_url: https://siempredivinas.com
+  auth_endpoint: api/auth 
 
 media_folder: "public/img"
 public_folder: "/img"
 locale: "es"
 
 collections:
+  # NUEVA COLECCIÓN: Para gestionar las secciones del catálogo con sus fotos
+  - name: "categorias"
+    label: "📁 Categorías del Catálogo"
+    folder: "src/content/categorias"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Nombre de la Categoría", name: "title", widget: "string"}
+      - {label: "Imagen de Portada (Para el cuadro)", name: "image", widget: "image"}
+      - {label: "Orden de aparición (1, 2, 3...)", name: "order", widget: "number", default: 1}
+
   - name: "productos"
     label: "👗 Productos"
     folder: "src/content/productos"
@@ -15,6 +29,16 @@ collections:
     fields:
       - {label: "Nombre Producto", name: "title", widget: "string"}
       - {label: "Precio (€)", name: "price", widget: "number", value_type: "float"}
+      
+      # VINCULACIÓN: Aquí ella elegirá la categoría que creó arriba
+      - label: "Categoría/Sección"
+        name: "category"
+        widget: "relation"
+        collection: "categorias"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
+
       - {label: "Estado del Stock", name: "stockStatus", widget: "select", options: ["En Stock", "Últimas Unidades", "Agotado"], default: "En Stock"}
       - {label: "Imagen Principal", name: "image", widget: "image"}
       - {label: "Foto Auxiliar 1 (Opcional)", name: "gallery1", widget: "image", required: false}

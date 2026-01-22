@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('categorias');
+  return categories.map(category => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const allProducts = await getCollection('productos');
+
+// Filtramos los productos que pertenecen a esta categoría y no son borradores
+const categoryProducts = allProducts.filter(product => 
+  product.data.category === category.data.title && !product.data.draft
+);
+---
+
+<Layout title={`${category.data.title} | Siempre Divinas`}>
+  <main class="py-16 container mx-auto px-4">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4 uppercase tracking-widest">
+            {category.data.title}
+        </h1>
+        <div class="h-1 w-20 bg-pink-brand mx-auto"></div>
+    </div>
+
+    {categoryProducts.length === 0 ? (
+      <div class="text-center py-20">
+        <p class="text-gray-500 text-xl">Aún no hay productos en esta sección. ¡Vuelve pronto!</p>
+        <a href="/" class="inline-block mt-6 text-pink-600 font-bold hover:underline">← Volver al inicio</a>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {categoryProducts.map((product) => (
+          <a href={`/productos/${product.slug}`} class="group block">
+            <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 aspect-[3/4] bg-gray-100">
+              <img 
+                src={product.data.image} 
+                alt={product.data.title} 
+                class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+            <div class="mt-3 text-center">
+              <h3 class="font-medium text-gray-900 group-hover:text-pink-600 transition">{product.data.title}</h3>
+              <p class="text-gold-600 font-bold text-lg">{product.data.price}€</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </main>
+</Layout>

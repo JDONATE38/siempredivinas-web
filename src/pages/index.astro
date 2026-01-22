@@ -2,140 +2,147 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Cargar productos que NO sean borrador
-const allProducts = (await getCollection('productos')).filter(p => !p.data.draft);
+const metaTitle = "Siempre Divinas | Tienda Online de Ropa de Mujer y Últimas Tendencias";
+const metaDescription = "Siéntete atractiva y poderosa con la mejor moda femenina online. Ropa de mujer, calzado y complementos con envíos en 24/48h. ¡Despierta tu diosa interior!";
+
+// 1. Cargar productos (Novedades)
+const allProducts = (await getCollection('productos'))
+  .filter(p => !p.data.draft)
+  .slice(0, 4); // Mostramos solo los 4 últimos como novedades
+
+// 2. Cargar categorías dinámicas para los cuadros con imagen
+const categories = (await getCollection('categorias'))
+  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 ---
 
-<Layout title="Tienda online de ropa, calzado y complementos para mujer | Siempre Divinas">
+<Layout title={metaTitle} description={metaDescription}>
   
   <main>
     
-    <section class="relative h-[600px] flex items-center justify-center text-center text-white bg-gray-800">
-        <div class="absolute inset-0 bg-black/40 z-10"></div>
+    <section class="relative h-[650px] flex items-center justify-center text-center text-white bg-gray-900 overflow-hidden">
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
         <img 
             src="/img/home-bg.webp" 
-            alt="Tienda online de ropa de mujer" 
+            alt="Moda femenina actual Siempre Divinas" 
             class="absolute inset-0 w-full h-full object-cover z-0"
             width="1920"
             height="1080"
             fetchpriority="high"
             loading="eager"
-            decoding="async"
         />
-        <div class="relative z-20 container mx-auto px-4">
-            <h1 class="font-serif text-4xl md:text-6xl font-bold mb-4 drop-shadow-md">
-               TIENDA ONLINE DE ROPA, CALZADO<br>
-                Y COMPLEMENTOS PARA MUJER
+        <div class="relative z-20 container mx-auto px-4 max-w-5xl">
+            <h1 class="font-serif text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg leading-tight text-white">
+               DESLUMBRA CADA DÍA:<br> 
+               <span class="text-pink-brand italic">Tu tienda online de ropa de mujer para sentirte imparable.</span>
             </h1>
-            <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto font-light">
-                Bienvenida a <strong>Siempre Divinas</strong>, tu sitio de referencia de <strong>moda femenina online</strong>.
-                Descubre nuestra colección de <strong>ropa diaria para mujer</strong>, diseñada para ofrecerte <strong>ropa cómoda y actual</strong>.
-                Completa tu look con nuestro exclusivo <strong>calzado de mujer</strong>.
+            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto font-light leading-relaxed text-gray-100">
+                No es solo lo que te pones, es cómo te sientes. Descubre la moda femenina actual que fusiona la esencia de una diosa con la comodidad de la vida real.
             </p>
-            <a href="#catalogo" class="bg-pink-brand hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
-                VER COLECCIÓN
+            <a href="#secciones" class="bg-pink-brand hover:bg-white hover:text-pink-brand text-white font-bold py-4 px-12 rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl uppercase tracking-widest text-lg border-2 border-pink-brand">
+                [QUIERO SER UNA DIOSA]
             </a>
         </div>
     </section>
-
-    <section class="bg-gray-50 py-10 border-b border-gray-200">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div class="p-4">
-                <div class="text-4xl mb-3">🚚</div>
-                <h2 class="font-bold text-lg mb-2">Envíos Rápidos</h2>
-                <p class="text-sm text-gray-700">Recibe tu pedido en 24/48h. Stock real en España.</p>
+    
+    <section class="bg-white py-16 border-b border-gray-100">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div class="flex flex-col items-center">
+                <div class="text-5xl mb-6 filter drop-shadow-sm">🚚</div>
+                <h2 class="font-serif font-bold text-2xl mb-4 text-gray-800 border-b-2 border-pink-brand pb-2 inline-block">Tu look, ahora mismo.</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Porque una mujer decidida no espera. Disfruta de entrega rápida con nuestro stock en España.
+                </p>
             </div>
-            <div class="p-4">
-                <div class="text-4xl mb-3">👠</div>
-                <h2 class="font-bold text-lg mb-2">Calzado y Complementos</h2>
-                <p class="text-sm text-gray-700">No solo ropa: tenemos el mejor <strong>calzado de mujer</strong> y <strong>complementos de moda</strong> para ti.</p>
+            <div class="flex flex-col items-center">
+                <div class="text-5xl mb-6">👠</div>
+                <h2 class="font-serif font-bold text-2xl mb-4 text-gray-800 border-b-2 border-pink-brand pb-2 inline-block">Detalles que empoderan.</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    El toque final para un estilo magnético. Encuentra el calzado y los complementos que elevan cualquier outfit.
+                </p>
             </div>
-            <div class="p-4">
-                <div class="text-4xl mb-3">💎</div>
-                <h2 class="font-bold text-lg mb-2">Buena calidad y Precios asequibles</h2>
-                <p class="text-sm text-gray-700">Buscamos ofrecerte siempre <strong>ropa economica y de calidad</strong>. Moda accesible sin renunciar al estilo</p>
+            <div class="flex flex-col items-center">
+                <div class="text-5xl mb-6">💎</div>
+                <h2 class="font-serif font-bold text-2xl mb-4 text-gray-800 border-b-2 border-pink-brand pb-2 inline-block">Lujo a tu alcance.</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Mereces ropa de calidad sin que tu bolsillo sufra. Precios asequibles para que estrenar sea tu nuevo hábito.
+                </p>
             </div>
         </div>
     </section>
 
-    <section id="catalogo" class="py-16 container mx-auto px-4">
-        <h2 class="text-3xl font-serif text-center font-bold mb-10 text-gold-600">
-            Novedades <span class="text-pink-brand">Divinas</span>
-        </h2>
-
-        {allProducts.length === 0 ? (
-            <p class="text-center text-gray-500">Cargando productos...</p>
-        ) : (
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {allProducts.map((product) => (
-                    <a href={`/productos/${product.slug}`} class="group block">
-                        <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 aspect-[3/4] bg-gray-100">
-                            <img 
-                                src={product.data.image} 
-                                alt={product.data.title} 
-                                class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                                width="400"
-                                height="533"
-                                loading="lazy"
-                            />
-                            <div class="absolute bottom-0 left-0 w-full bg-white/90 p-3 translate-y-full group-hover:translate-y-0 transition duration-300">
-                                <span class="text-pink-brand font-bold text-sm">Ver detalles &rarr;</span>
-                            </div>
+    <section id="novedades" class="py-16 container mx-auto px-4">
+        <h2 class="text-4xl font-serif text-center mb-10 italic">
+  <span class="text-yellow-600">Novedades</span> 
+  <span class="text-pink-400">Divinas</span>
+</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {allProducts.map((product) => (
+                <a href={`/productos/${product.slug}`} class="group block">
+                    <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 aspect-[3/4] bg-gray-100">
+                        <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+                        <div class="absolute bottom-0 left-0 w-full bg-pink-brand/90 p-3 translate-y-full group-hover:translate-y-0 transition duration-300 text-center">
+                            <span class="text-white font-bold text-sm uppercase italic">Ver detalles divinos &rarr;</span>
                         </div>
-                        <div class="mt-3 text-center">
-                            <h3 class="font-medium text-gray-900 group-hover:text-pink-600 transition">{product.data.title}</h3>
-                            <p class="text-gold-600 font-bold text-lg">{product.data.price}€</p>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <h3 class="font-medium text-gray-900 group-hover:text-pink-brand transition">{product.data.title}</h3>
+                        <p class="text-gold-600 font-bold text-lg">{product.data.price}€</p>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <section id="catalogo" class="py-20 bg-gray-50 scroll-mt-24">">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-serif text-center mb-10 italic">
+  <span class="text-yellow-600">Explora</span> 
+  <span class="text-pink-400">tu Catálogo</span>
+</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {categories.map((cat) => (
+                    <a href={`/categorias/${cat.slug}`} class="relative group block overflow-hidden rounded-2xl aspect-square shadow-xl border-4 border-white">
+                        <img src={cat.data.image} alt={cat.data.title} class="absolute inset-0 w-full h-full object-cover transition duration-1000 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-pink-brand/70 via-black/20 to-transparent flex items-center justify-center transition-all group-hover:bg-pink-brand/40">
+                            <h3 class="text-white text-3xl font-bold uppercase tracking-widest border-2 border-white px-8 py-3 backdrop-blur-sm">
+                                {cat.data.title}
+                            </h3>
                         </div>
                     </a>
                 ))}
             </div>
-        )}
-    </section>
-
-    <section class="bg-pink-50 py-16">
-        <div class="container mx-auto px-4 text-center max-w-4xl">
-            <h2 class="text-3xl font-serif font-bold mb-6 text-gray-900">Tu tienda online de confianza</h2>
-            
-            <div class="space-y-6 text-gray-800 leading-relaxed text-lg">
-                <p>
-                    En <strong>Siempre Divinas</strong> trabajamos para ser tu <strong>tienda online de ropa de mujer</strong> favorita. 
-                    Nuestra misión es ofrecerte prendas ideales para tu día a día. Somos especialistas en 
-                    <strong>ropa diaria para mujer</strong>, versátil y con mucho estilo.
-                </p>
-                <p>
-                    Además, sabemos que el look no termina en el vestido. Por eso contamos con una amplia selección de 
-                    <strong>calzado de mujer</strong> y <strong>complementos de moda</strong> para que salgas perfecta.
-                    Aquí encontrarás <strong>ropa con precios asequibles y de calidad</strong>, porque vestir bien no tiene por qué ser caro.
-                </p>
-            </div>
         </div>
     </section>
 
-    <section class="py-12 container mx-auto px-4 max-w-2xl">
-        <h2 class="text-2xl font-serif font-bold text-center mb-8">Preguntas Frecuentes</h2>
-        <div class="space-y-4">
-            <details class="group bg-white border border-gray-200 rounded-lg p-4 cursor-pointer">
-                <summary class="font-bold flex justify-between items-center list-none">
-                    ¿Cuánto tardan los envíos? <span class="transition group-open:rotate-180 text-pink-500">▼</span>
+    <section class="bg-pink-100 py-16">
+  <div class="container mx-auto px-4 text-black"> 
+    <h2 class="text-4xl font-serif text-center mb-6 italic">
+      Mucho más que una tienda online de ropa de mujer
+    </h2>
+    <p class="text-center max-w-2xl mx-auto leading-relaxed text-lg">
+      En Siempre Divinas trabajamos para ser tu tienda online de ropa de mujer favorita. 
+      Queremos que al mirarte al espejo te sientas atractiva, poderosa y divina. Seleccionamos las últimas tendencias para que logres un look actual que combina comodidad, calidad y estilo propio.
+    </p>
+  </div>
+</section>
+
+   <section class="py-20 container mx-auto px-4 max-w-3xl">
+        <h2 class="text-3xl font-serif font-bold text-center mb-12 text-gold-600">Resolviendo tus dudas, Divina</h2>
+        <div class="space-y-6">
+            <details class="group bg-white border-2 border-pink-50 rounded-2xl p-6 cursor-pointer hover:border-pink-200 transition shadow-sm">
+                <summary class="font-bold text-xl flex justify-between items-center list-none text-gray-900 group-open:text-pink-brand">
+                    ¿Cuándo recibiré mi pedido? <span class="group-open:rotate-180 transition-transform text-pink-brand">▼</span>
                 </summary>
-                <p class="text-gray-700 mt-2 text-sm pl-2">
-                    Al ser una <strong>tienda de moda de mujer de entrega en 48h</strong>, recibirás tu pedido volando.
+                <p class="text-gray-600 mt-4 leading-relaxed text-lg border-l-4 border-pink-brand pl-4">
+                    Con nuestra entrega rápida, tendrás tus favoritos en casa en 24/48h. ¡Moda a la velocidad de tus sueños!
                 </p>
             </details>
-            <details class="group bg-white border border-gray-200 rounded-lg p-4 cursor-pointer">
-                <summary class="font-bold flex justify-between items-center list-none">
-                    ¿Qué tipo de ropa vendéis? <span class="transition group-open:rotate-180 text-pink-500">▼</span>
+            <details class="group bg-white border-2 border-pink-50 rounded-2xl p-6 cursor-pointer hover:border-pink-200 transition shadow-sm">
+                <summary class="font-bold text-xl flex justify-between items-center list-none text-gray-900 group-open:text-pink-brand">
+                    ¿Es difícil comprar? <span class="group-open:rotate-180 transition-transform text-pink-brand">▼</span>
                 </summary>
-                <p class="text-gray-700 mt-2 text-sm pl-2">
-                    Desde <strong>tienda de ropa juvenil para mujer</strong> hasta de <strong>moda femenina actual</strong>. Siempre traemos las últimas <strong>tendencias en ropa de mujer</strong>.
-                </p>
-            </details>
-            <details class="group bg-white border border-gray-200 rounded-lg p-4 cursor-pointer shadow-sm">
-                <summary class="font-bold flex justify-between items-center list-none text-gray-800">
-                    ¿Puedo comprar por WhatsApp? <span class="transition group-open:rotate-180 text-pink-500">▼</span>
-                </summary>
-                <p class="text-gray-700 mt-2 text-sm pl-2 leading-relaxed">
-                    Por supuesto. Nos encanta el trato cercano. Puedes tramitar todo tu pedido por WhatsApp pulsando el botón verde.
+                <p class="text-gray-600 mt-4 leading-relaxed text-lg border-l-4 border-pink-brand pl-4">
+                    ¡Para nada! Si prefieres un trato personalizado, puedes comprar ropa por WhatsApp. Asesoría directa para la diosa que eres.
                 </p>
             </details>
         </div>
