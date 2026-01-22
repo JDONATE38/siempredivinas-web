@@ -13,9 +13,9 @@ export async function getStaticPaths() {
 const { category } = Astro.props;
 const allProducts = await getCollection('productos');
 
-// Filtramos los productos que pertenecen a esta categoría y no son borradores
+// Filtramos ignorando mayúsculas/minúsculas y espacios extra
 const categoryProducts = allProducts.filter(product => 
-  product.data.category === category.data.title && !product.data.draft
+  product.data.category?.trim().toLowerCase() === category.data.title?.trim().toLowerCase() && !product.data.draft
 );
 ---
 

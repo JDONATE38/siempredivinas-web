@@ -4,6 +4,7 @@ const productosCollection = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		price: z.number(),
+		category: z.string(),
 		stockStatus: z.enum(['En Stock', 'Últimas Unidades', 'Agotado']).default('En Stock'),
 		image: z.string(),
         // Aceptamos las 3 auxiliares como texto (ruta de la imagen) y opcionales
