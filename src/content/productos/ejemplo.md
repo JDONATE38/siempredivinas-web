@@ -1,7 +1,7 @@
 ---
 title: Vestido Floral Test
 price: 25.5
-category: PANTALONES
+category: Pantalones
 stockStatus: En Stock
 image: /img/logo.png
 sizes:
