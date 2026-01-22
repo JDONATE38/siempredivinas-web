@@ -1,7 +1,7 @@
 ---
-title: LEGGINS
+title: Leggins
 price: 15
-category: PANTALONES
+category: Pantalones
 stockStatus: En Stock
 image: /img/screenshot_20260122_224842_whatsapp-1-.jpg
 sizes:
