@@ -12,5 +12,5 @@ colors:
   - Negro
   - Beige
 description: Leggins termico imitacion piel
-draft: false
+draft: true
 ---
