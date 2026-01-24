@@ -47,4 +47,10 @@ collections:
       - {label: "Tallas", name: "sizes", widget: "select", multiple: true, options: ["XS","S","M","L","XL","XXL","Única"]}
       - {label: "Colores", name: "colors", widget: "select", multiple: true, options: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Rosa", "Beige", "Amarillo", "Estampado", "Oro", "Plata"]}
       - {label: "Descripción", name: "description", widget: "text"}
+      
+      # --- CAMPOS SEO NUEVOS ---
+      - {label: "SEO: Título Google (Opcional)", name: "seoTitle", widget: "string", required: false, hint: "Si lo dejas vacío, usará el nombre del producto"}
+      - {label: "SEO: Descripción Google (Opcional)", name: "seoDescription", widget: "text", required: false, hint: "Resumen que saldrá en los resultados de búsqueda"}
+      # -------------------------
+
       - {label: "Ocultar (Borrador)", name: "draft", widget: "boolean", default: false}

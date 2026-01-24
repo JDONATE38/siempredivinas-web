@@ -10,8 +10,21 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-// Recuperamos el nuevo campo stockStatus (si no existe, por defecto es 'En Stock')
-const { title, price, description, image, sizes, colors, gallery1, gallery2, gallery3, stockStatus = 'En Stock' } = entry.data;
+
+// Recuperamos los datos, INCLUYENDO LOS NUEVOS DE SEO (seoTitle, seoDescription)
+const { 
+    title, price, description, image, sizes, colors, 
+    gallery1, gallery2, gallery3, stockStatus = 'En Stock',
+    seoTitle, seoDescription 
+} = entry.data;
+
+// --- LÓGICA SEO INTELIGENTE ---
+// Si existe un título SEO, lo usamos. Si no, usamos el estándar.
+const pageTitle = seoTitle ? seoTitle : `${title} | Siempre Divinas`;
+
+// Si existe descripción SEO, la usamos. Si no, usamos la del producto.
+const pageDescription = seoDescription ? seoDescription : description;
+// ------------------------------
 
 const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com';
 const imageUrl = new URL(image, siteUrl).toString();
@@ -30,7 +43,7 @@ const availabilitySchema = stockStatus === 'Agotado'
 const productSchema = JSON.stringify({
   "@context": "https://schema.org/",
   "@type": "Product",
-  "name": title,
+  "name": title, // En el Schema dejamos el nombre real del producto, es lo correcto
   "image": schemaImages,
   "description": description,
   "sku": entry.slug,
@@ -54,7 +67,7 @@ const isAgotado = stockStatus === 'Agotado';
 const isLastUnits = stockStatus === 'Últimas Unidades';
 ---
 
-<Layout title={`${title} | Siempre Divinas`} description={description} image={image} schema={productSchema}>
+<Layout title={pageTitle} description={pageDescription} image={image} schema={productSchema}>
   
   <main class="container mx-auto px-4 py-12">
     <nav class="text-sm text-gray-500 mb-8 flex items-center gap-2">
@@ -126,7 +139,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 </div>
             )}
 
-            {/* BOTÓN DE COMPRA NUEVO */}
+            {/* BOTÓN DE COMPRA */}
             {isAgotado ? (
                 <button disabled class="w-full bg-gray-400 text-white font-bold py-4 px-6 rounded-full cursor-not-allowed flex items-center justify-center gap-3">
                     <span class="text-2xl">🚫</span> PRODUCTO AGOTADO
@@ -192,7 +205,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
             const colorValue = colorInput ? colorInput.value : 'Único';
 
             const cartItem = {
-                id: entry.slug + '-' + sizeValue + '-' + colorValue, // ID único para diferenciar tallas
+                id: entry.slug + '-' + sizeValue + '-' + colorValue,
                 title: entry.data.title,
                 price: entry.data.price,
                 image: entry.data.image,
@@ -215,7 +228,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
             localStorage.setItem('cart', JSON.stringify(cart));
 
-            // 5. Avisar al carrito para que se actualice y se abra
+            // 5. Avisar al carrito
             window.dispatchEvent(new Event('cart-updated'));
             window.dispatchEvent(new Event('toggle-cart'));
         });
