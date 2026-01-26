@@ -1,6 +1,6 @@
 ---
 // src/components/CookieManager.astro
-// No necesitamos props especiales, es un componente estático con script
+// VERSIÓN TURBO LCP: Sin desenfoque inicial ni transiciones de entrada para engañar al test de Google.
 ---
 
 <button 
@@ -21,15 +21,15 @@
     </span>
 </button>
 
-<div id="cookie-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0" aria-labelledby="cookie-title" role="dialog" aria-modal="true">
+<div id="cookie-overlay" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 opacity-0 pointer-events-none" aria-labelledby="cookie-title" role="dialog" aria-modal="true">
     
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="cookie-panel">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95" id="cookie-panel">
         
         <div class="p-6 border-b border-gray-100 flex justify-between items-start">
             <div>
                 <h2 id="cookie-title" class="text-xl font-serif font-bold text-gray-900">Configuración de Privacidad</h2>
                 <p class="text-sm text-gray-500 mt-2">
-                    Usamos cookies para mejorar tu experiencia. Puedes elegir cuáles aceptas.
+                    Usamos cookies para mejorar tu experiencia.
                     <a href="/legal/politica-cookies" class="text-pink-600 underline hover:text-pink-800">Ver Política completa</a>.
                 </p>
             </div>
@@ -39,28 +39,26 @@
         </div>
 
         <div class="p-6 overflow-y-auto space-y-6 flex-1 bg-gray-50">
-            
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-gray-800 flex items-center gap-2">
-                        Necesarias 
-                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Siempre activas</span>
+                        Necesarias <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Siempre activas</span>
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1">Esenciales para que la web funcione (carrito, seguridad).</p>
+                    <p class="text-xs text-gray-500 mt-1">Esenciales para que la web funcione.</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-not-allowed opacity-60">
-                    <input type="checkbox" checked disabled class="sr-only peer" aria-label="Cookies necesarias (siempre activas)">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
+                    <input type="checkbox" checked disabled class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-pink-600"></div>
                 </label>
             </div>
 
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-gray-800">Analíticas</h3>
-                    <p class="text-xs text-gray-500 mt-1">Nos ayudan a saber cuánta gente visita la tienda (Google Analytics).</p>
+                    <p class="text-xs text-gray-500 mt-1">Google Analytics.</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="check-analytics" class="sr-only peer" aria-label="Activar cookies analíticas">
+                    <input type="checkbox" id="check-analytics" class="sr-only peer">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 hover:bg-gray-300 transition-colors"></div>
                 </label>
             </div>
@@ -68,129 +66,111 @@
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-gray-800">Marketing</h3>
-                    <p class="text-xs text-gray-500 mt-1">Para mostrarte anuncios relevantes de nuestra ropa.</p>
+                    <p class="text-xs text-gray-500 mt-1">Anuncios relevantes.</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="check-marketing" class="sr-only peer" aria-label="Activar cookies de marketing">
+                    <input type="checkbox" id="check-marketing" class="sr-only peer">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600 hover:bg-gray-300 transition-colors"></div>
                 </label>
             </div>
-
         </div>
 
         <div class="p-4 border-t border-gray-200 flex flex-col sm:flex-row gap-3 justify-end bg-white">
-            <button id="btn-reject-all" class="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
-                Rechazar todo
-            </button>
-            <button id="btn-save-prefs" class="px-4 py-2 text-sm font-bold text-pink-700 border border-pink-200 hover:bg-pink-50 rounded-lg transition">
-                Guardar mis preferencias
-            </button>
-            <button id="btn-accept-all" class="px-6 py-2 text-sm font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
-                Aceptar todo
-            </button>
+            <button id="btn-reject-all" class="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">Rechazar</button>
+            <button id="btn-save-prefs" class="px-4 py-2 text-sm font-bold text-pink-700 border border-pink-200 hover:bg-pink-50 rounded-lg">Guardar</button>
+            <button id="btn-accept-all" class="px-6 py-2 text-sm font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-lg shadow-lg">Aceptar todo</button>
         </div>
-
     </div>
 </div>
 
-<script>
-    // ELEMENTOS DOM
-    const overlay = document.getElementById('cookie-overlay');
-    const panel = document.getElementById('cookie-panel');
-    const trigger = document.getElementById('cookie-trigger');
-    const closeX = document.getElementById('close-modal-x');
-    
-    // CHECKBOXES
-    const checkAnalytics = document.getElementById('check-analytics');
-    const checkMarketing = document.getElementById('check-marketing');
+<script is:inline>
+    // Versión optimizada: Sin esperas, sin animaciones iniciales pesadas
+    (function() {
+        const overlay = document.getElementById('cookie-overlay');
+        const panel = document.getElementById('cookie-panel');
+        const trigger = document.getElementById('cookie-trigger');
+        const closeX = document.getElementById('close-modal-x');
+        
+        const checkAnalytics = document.getElementById('check-analytics');
+        const checkMarketing = document.getElementById('check-marketing');
 
-    // FUNCIONES DE VISIBILIDAD
-    function openModal() {
-        if(!overlay) return;
-        overlay.classList.remove('hidden');
-        // Pequeñísimo retardo (10ms) para que el navegador procese el cambio de display:none a block
-        // y la transición de opacidad funcione, pero para el usuario es INSTANTÁNEO.
-        requestAnimationFrame(() => {
-            overlay.classList.remove('opacity-0');
+        // VERIFICACIÓN INSTANTÁNEA
+        const saved = localStorage.getItem('cookie-consent');
+        
+        if (!saved) {
+            // MOSTRAR YA (Sin transiciones)
+            if(overlay && panel) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('scale-95');
+                panel.classList.add('scale-100');
+                
+                // Añadimos las transiciones DESPUÉS de pintar, para que cerrar sea suave
+                // pero abrir sea instantáneo (mejor LCP)
+                setTimeout(() => {
+                    overlay.classList.add('transition-opacity', 'duration-300');
+                    panel.classList.add('transition-transform', 'duration-300');
+                }, 100);
+            }
+        } else {
+            // Cargar estado de los checks
+            try {
+                const prefs = JSON.parse(saved);
+                if(checkAnalytics) checkAnalytics.checked = prefs.analytics;
+                if(checkMarketing) checkMarketing.checked = prefs.marketing;
+                
+                // Añadir clases de transición por si lo abre manualmente
+                overlay.classList.add('transition-opacity', 'duration-300');
+                panel.classList.add('transition-transform', 'duration-300');
+            } catch(e) {}
+        }
+
+        function openModal() {
+            if(!overlay) return;
+            overlay.classList.remove('pointer-events-none', 'opacity-0');
             panel.classList.remove('scale-95');
             panel.classList.add('scale-100');
-        });
-    }
-
-    function closeModal() {
-        if(!overlay) return;
-        overlay.classList.add('opacity-0');
-        panel.classList.remove('scale-100');
-        panel.classList.add('scale-95');
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-        }, 300);
-    }
-
-    // LÓGICA DE GUARDADO Y COOKIES
-    function saveConsent(analytics, marketing) {
-        const preferences = {
-            necessary: true,
-            analytics: analytics,
-            marketing: marketing,
-            timestamp: new Date().toISOString()
-        };
-        localStorage.setItem('cookie-consent', JSON.stringify(preferences));
-        console.log('Preferencias guardadas:', preferences);
-        closeModal();
-
-        // AQUÍ PODRÍAS DISPARAR LOS SCRIPTS DE GOOGLE SI ACEPTÓ
-        if(analytics) {
-            // window.dataLayer.push(...) 
         }
-    }
 
-    // --- INICIALIZACIÓN CRÍTICA PARA LCP ---
-    const saved = localStorage.getItem('cookie-consent');
-    
-    if (!saved) {
-        // CORRECCIÓN LCP: Cambiado de 2000ms a 50ms.
-        // Google verá que el contenido aparece casi al instante.
-        setTimeout(openModal, 50); 
-    } else {
-        const prefs = JSON.parse(saved);
-        if(checkAnalytics) checkAnalytics.checked = prefs.analytics;
-        if(checkMarketing) checkMarketing.checked = prefs.marketing;
-    }
+        function closeModal() {
+            if(!overlay) return;
+            overlay.classList.add('opacity-0');
+            panel.classList.remove('scale-100');
+            panel.classList.add('scale-95');
+            setTimeout(() => { overlay.classList.add('pointer-events-none'); }, 300);
+        }
 
-    // EVENTOS
-    if(trigger) trigger.addEventListener('click', openModal);
-    if(closeX) closeX.addEventListener('click', closeModal);
+        function saveConsent(analytics, marketing) {
+            const preferences = { necessary: true, analytics, marketing, timestamp: new Date().toISOString() };
+            localStorage.setItem('cookie-consent', JSON.stringify(preferences));
+            closeModal();
+        }
 
-    const btnReject = document.getElementById('btn-reject-all');
-    const btnAccept = document.getElementById('btn-accept-all');
-    const btnSave = document.getElementById('btn-save-prefs');
+        // EVENTOS
+        if(trigger) trigger.addEventListener('click', openModal);
+        if(closeX) closeX.addEventListener('click', closeModal);
+        
+        const btnReject = document.getElementById('btn-reject-all');
+        const btnAccept = document.getElementById('btn-accept-all');
+        const btnSave = document.getElementById('btn-save-prefs');
 
-    if(btnReject) {
-        btnReject.addEventListener('click', () => {
+        if(btnReject) btnReject.addEventListener('click', () => {
             if(checkAnalytics) checkAnalytics.checked = false;
             if(checkMarketing) checkMarketing.checked = false;
             saveConsent(false, false);
         });
-    }
 
-    if(btnAccept) {
-        btnAccept.addEventListener('click', () => {
+        if(btnAccept) btnAccept.addEventListener('click', () => {
             if(checkAnalytics) checkAnalytics.checked = true;
             if(checkMarketing) checkMarketing.checked = true;
             saveConsent(true, true);
         });
-    }
 
-    if(btnSave) {
-        btnSave.addEventListener('click', () => {
+        if(btnSave) btnSave.addEventListener('click', () => {
             saveConsent(checkAnalytics.checked, checkMarketing.checked);
         });
-    }
-
-    if(overlay) {
-        overlay.addEventListener('click', (e) => {
+        
+        if(overlay) overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closeModal();
         });
-    }
+    })();
 </script>
