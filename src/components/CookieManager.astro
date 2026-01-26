@@ -1,5 +1,6 @@
 ---
 // src/components/CookieManager.astro
+// No necesitamos props especiales, es un componente estático con script
 ---
 
 <button 
@@ -93,25 +94,27 @@
 </div>
 
 <script>
-    // ELEMENTOS
+    // ELEMENTOS DOM
     const overlay = document.getElementById('cookie-overlay');
     const panel = document.getElementById('cookie-panel');
     const trigger = document.getElementById('cookie-trigger');
     const closeX = document.getElementById('close-modal-x');
     
-    // CHECKBOXES (Eliminado "as HTMLInputElement" para evitar errores si no usas TS estricto)
+    // CHECKBOXES
     const checkAnalytics = document.getElementById('check-analytics');
     const checkMarketing = document.getElementById('check-marketing');
 
-    // FUNCIONES DE APERTURA/CIERRE
+    // FUNCIONES DE VISIBILIDAD
     function openModal() {
         if(!overlay) return;
         overlay.classList.remove('hidden');
-        setTimeout(() => {
+        // Pequeñísimo retardo (10ms) para que el navegador procese el cambio de display:none a block
+        // y la transición de opacidad funcione, pero para el usuario es INSTANTÁNEO.
+        requestAnimationFrame(() => {
             overlay.classList.remove('opacity-0');
             panel.classList.remove('scale-95');
             panel.classList.add('scale-100');
-        }, 10);
+        });
     }
 
     function closeModal() {
@@ -124,7 +127,7 @@
         }, 300);
     }
 
-    // LÓGICA DE GUARDADO
+    // LÓGICA DE GUARDADO Y COOKIES
     function saveConsent(analytics, marketing) {
         const preferences = {
             necessary: true,
@@ -135,12 +138,20 @@
         localStorage.setItem('cookie-consent', JSON.stringify(preferences));
         console.log('Preferencias guardadas:', preferences);
         closeModal();
+
+        // AQUÍ PODRÍAS DISPARAR LOS SCRIPTS DE GOOGLE SI ACEPTÓ
+        if(analytics) {
+            // window.dataLayer.push(...) 
+        }
     }
 
-    // INICIALIZACIÓN
+    // --- INICIALIZACIÓN CRÍTICA PARA LCP ---
     const saved = localStorage.getItem('cookie-consent');
+    
     if (!saved) {
-        setTimeout(openModal, 2000);
+        // CORRECCIÓN LCP: Cambiado de 2000ms a 50ms.
+        // Google verá que el contenido aparece casi al instante.
+        setTimeout(openModal, 50); 
     } else {
         const prefs = JSON.parse(saved);
         if(checkAnalytics) checkAnalytics.checked = prefs.analytics;
