@@ -11,20 +11,34 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-// Recuperamos los datos, INCLUYENDO LOS NUEVOS DE SEO (seoTitle, seoDescription)
+// 1. Recuperamos los datos (Incluyendo los campos nuevos customSizes y customColors)
 const { 
-    title, price, description, image, sizes, colors, 
+    title, price, description, image, 
+    sizes, customSizes, // <-- Tallas
+    colors, customColors, // <-- Colores
     gallery1, gallery2, gallery3, stockStatus = 'En Stock',
     seoTitle, seoDescription 
 } = entry.data;
 
 // --- LÓGICA SEO INTELIGENTE ---
-// Si existe un título SEO, lo usamos. Si no, usamos el estándar.
 const pageTitle = seoTitle ? seoTitle : `${title} | Siempre Divinas`;
-
-// Si existe descripción SEO, la usamos. Si no, usamos la del producto.
 const pageDescription = seoDescription ? seoDescription : description;
 // ------------------------------
+
+// --- 2. LA BATIDORA: FUNCIÓN PARA MEZCLAR LISTAS ---
+// Esta función junta los botones estándar con el texto escrito a mano
+function mergeOptions(list, customString) {
+    const listItems = list || []; // Si no ha elegido botones, lista vacía
+    const customItems = customString 
+        ? customString.split(',').map(s => s.trim()).filter(s => s !== '') // Separar por comas y limpiar espacios
+        : [];
+    return [...listItems, ...customItems]; // Juntar todo en una sola lista
+}
+
+// Creamos las listas definitivas
+const finalSizes = mergeOptions(sizes, customSizes);
+const finalColors = mergeOptions(colors, customColors);
+// ---------------------------------------------------
 
 const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com';
 const imageUrl = new URL(image, siteUrl).toString();
@@ -43,7 +57,7 @@ const availabilitySchema = stockStatus === 'Agotado'
 const productSchema = JSON.stringify({
   "@context": "https://schema.org/",
   "@type": "Product",
-  "name": title, // En el Schema dejamos el nombre real del producto, es lo correcto
+  "name": title,
   "image": schemaImages,
   "description": description,
   "sku": entry.slug,
@@ -111,25 +125,27 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
             <div class="prose text-gray-600 mb-8"><p>{description}</p></div>
 
-            {sizes && (
+            {/* TALLAS: Usamos finalSizes en lugar de sizes */}
+            {finalSizes && finalSizes.length > 0 && (
                 <div class="mb-6 product-option" data-type="talla">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige tu talla:</label>
                     <div class="flex gap-3 flex-wrap">
-                        {sizes.map(size => (
+                        {finalSizes.map(size => (
                             <label class={`cursor-pointer ${isAgotado ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                 <input type="radio" name="size" value={size} disabled={isAgotado} class="peer sr-only" />
-                                <div class="w-12 h-12 flex items-center justify-center border-2 border-gray-200 rounded-md font-bold text-gray-500 peer-checked:border-pink-brand peer-checked:text-pink-brand peer-checked:bg-pink-50 hover:border-gray-400 transition">{size}</div>
+                                <div class="min-w-[3rem] px-2 h-12 flex items-center justify-center border-2 border-gray-200 rounded-md font-bold text-gray-500 peer-checked:border-pink-brand peer-checked:text-pink-brand peer-checked:bg-pink-50 hover:border-gray-400 transition">{size}</div>
                             </label>
                         ))}
                     </div>
                 </div>
             )}
 
-            {colors && (
+            {/* COLORES: Usamos finalColors en lugar de colors */}
+            {finalColors && finalColors.length > 0 && (
                 <div class="mb-8 product-option" data-type="color">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige color:</label>
                     <div class="flex gap-3 flex-wrap">
-                        {colors.map(color => (
+                        {finalColors.map(color => (
                             <label class={`cursor-pointer ${isAgotado ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                 <input type="radio" name="color" value={color} disabled={isAgotado} class="peer sr-only" />
                                 <div class="px-4 py-2 border-2 border-gray-200 rounded-full font-medium text-gray-600 peer-checked:border-gold-600 peer-checked:text-gold-600 peer-checked:bg-yellow-50 hover:border-gray-400 transition">{color}</div>
@@ -183,11 +199,11 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     
     if (btn) {
         btn.addEventListener('click', () => {
-            // 1. Obtener valores de los inputs RADIO
+            // 1. Obtener valores
             const sizeInput = document.querySelector('input[name="size"]:checked');
             const colorInput = document.querySelector('input[name="color"]:checked');
             
-            // 2. Validaciones
+            // 2. Validaciones (Si existen los bloques de opciones)
             const hasSizes = document.querySelector('.product-option[data-type="talla"]');
             if (hasSizes && !sizeInput) { 
                 alert('⚠️ Por favor, selecciona una TALLA antes de añadir.'); 
@@ -200,7 +216,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 return; 
             }
 
-            // 3. Crear el objeto del producto
+            // 3. Crear el objeto
             const sizeValue = sizeInput ? sizeInput.value : 'Única';
             const colorValue = colorInput ? colorInput.value : 'Único';
 
@@ -216,8 +232,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
             // 4. Guardar en LocalStorage
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            
-            // Comprobar si ya existe para sumar cantidad
             const existingItemIndex = cart.findIndex(item => item.id === cartItem.id);
 
             if (existingItemIndex > -1) {

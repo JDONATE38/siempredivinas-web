@@ -44,11 +44,18 @@ collections:
       - {label: "Foto Auxiliar 1 (Opcional)", name: "gallery1", widget: "image", required: false}
       - {label: "Foto Auxiliar 2 (Opcional)", name: "gallery2", widget: "image", required: false}
       - {label: "Foto Auxiliar 3 (Opcional)", name: "gallery3", widget: "image", required: false}
-      - {label: "Tallas", name: "sizes", widget: "select", multiple: true, options: ["XS","S","M","L","XL","XXL","Única"]}
-      - {label: "Colores", name: "colors", widget: "select", multiple: true, options: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Rosa", "Beige", "Amarillo", "Estampado", "Oro", "Plata"]}
+      
+      # --- TALLAS (Híbrido) ---
+      - {label: "Tallas (Selección Rápida)", name: "sizes", widget: "select", multiple: true, required: false, options: ["XS","S","M","L","XL","XXL","Única"]}
+      - {label: "Otras Tallas (Escribir a mano)", name: "customSizes", widget: "string", required: false, hint: "Ej: 34, 46, Especial. Sepáralas por comas."}
+      
+      # --- COLORES (Híbrido) ---
+      - {label: "Colores (Selección Rápida)", name: "colors", widget: "select", multiple: true, required: false, options: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Rosa", "Beige", "Amarillo", "Estampado", "Oro", "Plata"]}
+      - {label: "Otros Colores (Escribir a mano)", name: "customColors", widget: "string", required: false, hint: "Ej: Verde Lima, Topos, Fucsia. Sepáralos por comas."}
+
       - {label: "Descripción", name: "description", widget: "text"}
       
-      # --- CAMPOS SEO NUEVOS ---
+      # --- CAMPOS SEO ---
       - {label: "SEO: Título Google (Opcional)", name: "seoTitle", widget: "string", required: false, hint: "Si lo dejas vacío, usará el nombre del producto"}
       - {label: "SEO: Descripción Google (Opcional)", name: "seoDescription", widget: "text", required: false, hint: "Resumen que saldrá en los resultados de búsqueda"}
       # -------------------------

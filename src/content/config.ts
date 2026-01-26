@@ -13,7 +13,13 @@ const productosCollection = defineCollection({
         gallery3: z.string().optional(),
         
         sizes: z.array(z.string()).optional(),
+        // 👇 AÑADIDO: Tallas personalizadas a mano (texto libre)
+        customSizes: z.string().optional(),
+
         colors: z.array(z.string()).optional(),
+        // 👇 AÑADIDO: Colores personalizados a mano (texto libre)
+        customColors: z.string().optional(),
+
         description: z.string(),
 
         // 👇 NUEVOS CAMPOS SEO (Opcionales)
