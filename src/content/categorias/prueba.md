@@ -1,1 +1,3 @@
-
+---
+title: "Categoría de Prueba"
+---
