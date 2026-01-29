@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro'; // Ajusta la ruta de importación si es necesario (subimos 3 niveles)
+
+export async function getStaticPaths() {
+  const categorias = await getCollection('categorias');
+  const subcategorias = await getCollection('subcategorias');
+  
+  // Generamos rutas para cada combinación válida de Categoría -> Subcategoría
+  const paths = [];
+
+  categorias.forEach(cat => {
+    // Buscamos subcategorías que pertenezcan a esta categoría padre
+    const children = subcategorias.filter(sub => 
+      sub.data.parent_categories && sub.data.parent_categories.includes(cat.data.name)
+    );
+
+    children.forEach(sub => {
+      paths.push({
+        params: { slug: cat.slug, subslug: sub.slug },
+        props: { categoria: cat, subcategoria: sub },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { categoria, subcategoria } = Astro.props;
+
+// Obtener productos filtrados por ESTA subcategoría
+const allProductos = await getCollection('productos');
+const productos = allProductos.filter((producto) => {
+  const inSub = producto.data.subcategorias && producto.data.subcategorias.includes(subcategoria.data.name);
+  return !producto.data.draft && inSub;
+});
+---
+
+<Layout 
+  title={`${subcategoria.data.title} en ${categoria.data.title} | Siempre Divinas`} 
+  description={subcategoria.data.description || `Compra ${subcategoria.data.title} online.`}
+>
+  
+  <nav class="bg-white border-b border-gray-100 py-3 px-4 sm:px-6 lg:px-8 text-sm text-gray-500">
+    <ol class="list-none p-0 inline-flex">
+      <li class="flex items-center">
+        <a href="/" class="hover:text-pink-600">Inicio</a>
+        <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+      </li>
+      <li class="flex items-center">
+        <a href={`/categorias/${categoria.slug}`} class="hover:text-pink-600">{categoria.data.title}</a>
+        <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+      </li>
+      <li>
+        <span class="text-gray-900 font-semibold">{subcategoria.data.title}</span>
+      </li>
+    </ol>
+  </nav>
+
+  <section class="py-10 text-center px-4">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">{subcategoria.data.title}</h1>
+    <p class="text-gray-500">Explora nuestra selección exclusiva</p>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    {productos.length > 0 ? (
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
+        {productos.map((producto) => (
+          <a href={`/productos/${producto.slug}`} class="group">
+            <div class="aspect-w-3 aspect-h-4 w-full overflow-hidden rounded-lg bg-gray-100 relative">
+              <img 
+                src={producto.data.image} 
+                alt={producto.data.title} 
+                class="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+              {producto.data.stockStatus !== 'En Stock' && (
+                <span class={`absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white rounded ${producto.data.stockStatus === 'Agotado' ? 'bg-gray-800' : 'bg-red-500'}`}>
+                  {producto.data.stockStatus}
+                </span>
+              )}
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700 font-medium">
+                  <span aria-hidden="true" class="absolute inset-0"></span>
+                  {producto.data.title}
+                </h3>
+              </div>
+              <p class="text-sm font-bold text-gray-900">{producto.data.price} €</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20 border-2 border-dashed border-gray-200 rounded-xl">
+        <p class="text-lg text-gray-500">¡Vaya! Aún no hemos subido productos a {subcategoria.data.title}.</p>
+        <a href={`/categorias/${categoria.slug}`} class="mt-4 inline-block px-6 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition-colors">
+          Ver todo en {categoria.data.title}
+        </a>
+      </div>
+    )}
+  </div>
+</Layout>

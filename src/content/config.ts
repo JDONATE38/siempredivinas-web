@@ -4,7 +4,7 @@ const productosCollection = defineCollection({
     schema: z.object({
         title: z.string(),
         price: z.number(),
-        category: z.string(),
+        subcategory: z.string(), // Changed from category to subcategory
         stockStatus: z.enum(['En Stock', 'Últimas Unidades', 'Agotado']).default('En Stock'),
         image: z.string(),
         // Aceptamos las 3 auxiliares como texto (ruta de la imagen) y opcionales
@@ -30,6 +30,31 @@ const productosCollection = defineCollection({
     }),
 });
 
+const categoriasCollection = defineCollection({
+    schema: z.object({
+        title: z.string(), // Nombre para Menús
+        pageTitle: z.string(), // Título de la Página de Categoría
+        description: z.string(), // Descripción de la Categoría
+        order: z.number().default(1), // Orden de aparición
+        seoTitle: z.string().optional(), // SEO: Meta Título
+        seoDescription: z.string().optional(), // SEO: Meta Descripción
+    }),
+});
+
+const subcategoriasCollection = defineCollection({
+    schema: z.object({
+        title: z.string(), // Nombre para Menús
+        pageTitle: z.string(), // Título de la Página de Subcategoría
+        description: z.string(), // Descripción de la Subcategoría
+        order: z.number().default(1), // Orden de aparición
+        seoTitle: z.string().optional(), // SEO: Meta Título
+        seoDescription: z.string().optional(), // SEO: Meta Descripción
+        parentCategory: z.string(), // Categoría Principal (relación por título)
+    }),
+});
+
 export const collections = {
     'productos': productosCollection,
+    'categorias': categoriasCollection,
+    'subcategorias': subcategoriasCollection,
 };

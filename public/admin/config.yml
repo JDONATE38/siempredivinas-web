@@ -17,9 +17,34 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Nombre de la Categoría", name: "title", widget: "string"}
-      - {label: "Imagen de Portada (Para el cuadro)", name: "image", widget: "image"}
+      - {label: "Nombre para Menús", name: "title", widget: "string", hint: "Nombre que aparecerá en los menús de navegación."}
+      - {label: "Título de la Página de Categoría", name: "pageTitle", widget: "string", hint: "Título principal que se mostrará en la página de la categoría."}
+      - {label: "Descripción de la Categoría", name: "description", widget: "text", hint: "Contenido descriptivo para la página de la categoría."}
       - {label: "Orden de aparición (1, 2, 3...)", name: "order", widget: "number", default: 1}
+      - {label: "SEO: Meta Título (Opcional)", name: "seoTitle", widget: "string", required: false, hint: "Título para los buscadores. Si se deja vacío, usará el 'Título de la Página de Categoría'."}
+      - {label: "SEO: Meta Descripción (Opcional)", name: "seoDescription", widget: "text", required: false, hint: "Descripción para los buscadores."}
+  
+  # NUEVA COLECCIÓN: Para gestionar las subcategorías
+  - name: "subcategorias"
+    label: "📂 Subcategorías"
+    folder: "src/content/subcategorias"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Nombre para Menús", name: "title", widget: "string", hint: "Nombre que aparecerá en los menús de navegación."}
+      - {label: "Título de la Página de Subcategoría", name: "pageTitle", widget: "string", hint: "Título principal que se mostrará en la página de la subcategoría."}
+      - {label: "Descripción de la Subcategoría", name: "description", widget: "text", hint: "Contenido descriptivo para la página de la subcategoría."}
+      - {label: "Orden de aparición (1, 2, 3...)", name: "order", widget: "number", default: 1}
+      - {label: "SEO: Meta Título (Opcional)", name: "seoTitle", widget: "string", required: false, hint: "Título para los buscadores. Si se deja vacío, usará el 'Título de la Página de Subcategoría'."}
+      - {label: "SEO: Meta Descripción (Opcional)", name: "seoDescription", widget: "text", required: false, hint: "Descripción para los buscadores."}
+      - label: "Categoría Principal"
+        name: "parentCategory"
+        widget: "relation"
+        collection: "categorias"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
+
 
   - name: "productos"
     label: "👗 Productos"
@@ -33,8 +58,11 @@ collections:
       # VINCULACIÓN: Aquí ella elegirá la categoría que creó arriba
       - label: "Categoría/Sección"
         name: "category"
+      - label: "Subcategoría"
+        name: "subcategory"
         widget: "relation"
         collection: "categorias"
+        collection: "subcategorias"
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
