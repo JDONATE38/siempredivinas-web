@@ -1,4 +1,5 @@
 ---
 title: "Categoría de Prueba"
-description: "Descripción de la categoría"
+pageTitle: "Título de la página de prueba"
+description: "Descripción de prueba para arreglar el error"
 ---
