@@ -2,36 +2,43 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. Obtener el slug de la URL
-const { slug } = Astro.params;
-
-// 2. Obtener todas las categorías y encontrar la que coincide con el slug
-const allCategories = await getCollection('categorias');
-const category = allCategories.find(cat => cat.slug === slug);
-
-// Si la categoría no existe, redirigir a 404 o mostrar un mensaje
-if (!category) {
-    return Astro.redirect('/404'); // O puedes renderizar una página de error personalizada
+// 1. ESTO ES LO QUE FALTABA: Generar las rutas para cada categoría
+export async function getStaticPaths() {
+  const allCategories = await getCollection('categorias');
+  return allCategories.map((cat) => ({
+    params: { slug: cat.slug },
+    props: { category: cat },
+  }));
 }
 
-// 3. Obtener todos los productos y filtrar por la categoría actual
-const allProducts = await getCollection('productos');
-const productsInCategory = allProducts.filter(product => 
-    !product.data.draft && product.data.category === category.data.title
+// 2. Recibir los datos de la categoría actual
+const { category } = Astro.props;
+
+// 3. Obtener Subcategorías (Esto faltaba definirse en tu código)
+const allSubcategories = await getCollection('subcategorias');
+// Filtramos buscando las subcategorías cuyo "parentCategory" coincida con esta categoría
+const subcategoriesForThisCategory = allSubcategories.filter(subcat => 
+    subcat.data.parentCategory === category.slug || subcat.data.parentCategory === category.id
 );
 
-// 4. Preparar los datos para el Layout y el contenido de la página
+// 4. Obtener todos los productos y filtrar por la categoría actual
+const allProducts = await getCollection('productos');
+// Nota: Usamos 'includes' o comparación directa para buscar la categoría en el producto
+const productsInCategory = allProducts.filter(product => 
+    !product.data.draft && 
+    (product.data.category === category.data.title || product.data.category === category.slug)
+);
+
+// 5. Preparar los datos para el Layout
 const pageTitle = category.data.pageTitle || category.data.title;
 const pageDescription = category.data.description || `Descubre nuestra colección de ${category.data.title} en Siempre Divinas.`;
 const seoTitle = category.data.seoTitle || pageTitle;
 const seoDescription = category.data.seoDescription || pageDescription;
-
 ---
 
 <Layout title={seoTitle} description={seoDescription}>
     <main class="py-12 md:py-16">
         <div class="container mx-auto px-4">
-            <!-- Título y Descripción de la Categoría -->
             <h1 class="text-4xl md:text-5xl font-serif text-center mb-6 italic">
                 <span class="text-pink-400">{pageTitle}</span>
             </h1>
@@ -41,7 +48,6 @@ const seoDescription = category.data.seoDescription || pageDescription;
                 </p>
             )}
 
-            <!-- Mostrar Subcategorías de esta Categoría Principal -->
             {subcategoriesForThisCategory.length > 0 && (
                 <div class="mb-10">
                     <h2 class="text-3xl font-serif text-center mb-6 italic">
@@ -61,7 +67,6 @@ const seoDescription = category.data.seoDescription || pageDescription;
                 Todos los productos de <span class="text-pink-400">{pageTitle}</span>
             </h2>
 
-            <!-- Mensaje si no hay productos -->
             {productsInCategory.length === 0 && (
                 <div class="text-center py-10 text-gray-500">
                     <p class="text-xl mb-4">¡Ups! Parece que no hay productos en esta categoría todavía.</p>
@@ -71,7 +76,6 @@ const seoDescription = category.data.seoDescription || pageDescription;
                 </div>
             )}
 
-            <!-- Grid de Productos de la Categoría -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {productsInCategory.map((product) => (
                     <a href={`/productos/${product.slug}`} class="group block">
@@ -91,3 +95,4 @@ const seoDescription = category.data.seoDescription || pageDescription;
         </div>
     </main>
 </Layout>
+
