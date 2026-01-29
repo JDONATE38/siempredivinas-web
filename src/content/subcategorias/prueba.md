@@ -1,1 +1,3 @@
-
+---
+title: "Subcategoría de Prueba"
+---
