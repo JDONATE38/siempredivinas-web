@@ -2,22 +2,25 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. Obtener el slug de la URL
-const { slug } = Astro.params;
-
-// 2. Obtener todas las subcategorías y encontrar la que coincide con el slug
-const allSubcategories = await getCollection('subcategorias');
-const subcategory = allSubcategories.find(subcat => subcat.slug === slug);
-
-// Si la subcategoría no existe, redirigir a 404 o mostrar un mensaje
-if (!subcategory) {
-    return Astro.redirect('/404'); // O puedes renderizar una página de error personalizada
+// 1. ESTO ES LO QUE FALTABA: Generar las rutas para cada subcategoría
+export async function getStaticPaths() {
+  const allSubcategories = await getCollection('subcategorias');
+  return allSubcategories.map((subcat) => ({
+    params: { slug: subcat.slug },
+    props: { subcategory: subcat },
+  }));
 }
+
+// 2. Recibimos la subcategoría directamente de las props (gracias a la función de arriba)
+const { subcategory } = Astro.props;
 
 // 3. Obtener todos los productos y filtrar por la subcategoría actual
 const allProducts = await getCollection('productos');
+
+// Nota: Comparamos con el título O con el slug por si acaso pusiste uno u otro en el producto
 const productsInSubcategory = allProducts.filter(product => 
-    !product.data.draft && product.data.subcategory === subcategory.data.title
+    !product.data.draft && 
+    (product.data.subcategory === subcategory.data.title || product.data.subcategory === subcategory.slug)
 );
 
 // 4. Preparar los datos para el Layout y el contenido de la página
@@ -25,13 +28,11 @@ const pageTitle = subcategory.data.pageTitle || subcategory.data.title;
 const pageDescription = subcategory.data.description || `Descubre nuestra colección de ${subcategory.data.title} en Siempre Divinas.`;
 const seoTitle = subcategory.data.seoTitle || pageTitle;
 const seoDescription = subcategory.data.seoDescription || pageDescription;
-
 ---
 
 <Layout title={seoTitle} description={seoDescription}>
     <main class="py-12 md:py-16">
         <div class="container mx-auto px-4">
-            <!-- Título y Descripción de la Subcategoría -->
             <h1 class="text-4xl md:text-5xl font-serif text-center mb-6 italic">
                 <span class="text-pink-400">{pageTitle}</span>
             </h1>
@@ -41,7 +42,6 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
                 </p>
             )}
 
-            <!-- Mensaje si no hay productos -->
             {productsInSubcategory.length === 0 && (
                 <div class="text-center py-10 text-gray-500">
                     <p class="text-xl mb-4">¡Ups! Parece que no hay productos en esta subcategoría todavía.</p>
@@ -51,7 +51,6 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
                 </div>
             )}
 
-            <!-- Grid de Productos de la Subcategoría -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {productsInSubcategory.map((product) => (
                     <a href={`/productos/${product.slug}`} class="group block">
@@ -71,4 +70,4 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
         </div>
     </main>
 </Layout>
-```
+
