@@ -176,4 +176,33 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 
         <slot />
 
-        <footer class="bg-black text-
+        <footer class="bg-black text-white py-10 mt-auto">
+            <div class="container mx-auto px-4 text-center"> 
+                <p class="font-serif text-xl mb-6">Siempre Divinas</p>
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-400 mb-6">
+                    <a href="/legal/aviso-legal" class="hover:text-white transition">Aviso Legal</a>
+                    <a href="/legal/condiciones-compra" class="hover:text-white transition">Condiciones de Compra</a>
+                    <a href="/legal/politica-privacidad" class="hover:text-white transition">Privacidad</a>
+                    <a href="/legal/politica-cookies" class="hover:text-white transition">Cookies</a>
+                </div>
+                <p class="text-xs text-gray-400">© 2026 Siempre Divinas | Rivas Vaciamadrid</p>
+            </div>
+        </footer>
+        <WhatsAppBtn />
+        <CookieManager />
+        <Cart />
+        <script>
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
+            const mobileSideMenu = document.getElementById('mobile-side-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            function openMobileMenu() { if (mobileSideMenu && mobileMenuOverlay) { mobileSideMenu.classList.remove('-translate-x-full'); mobileSideMenu.classList.add('translate-x-0'); mobileMenuOverlay.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+            function closeMobileMenu() { if (mobileSideMenu && mobileMenuOverlay) { mobileSideMenu.classList.remove('translate-x-0'); mobileSideMenu.classList.add('-translate-x-full'); mobileMenuOverlay.classList.add('hidden'); document.body.style.overflow = ''; } }
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMobileMenu);
+            if (closeMobileMenuBtn) closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
+            if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            if (mobileSideMenu) { mobileSideMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', closeMobileMenu); }); }
+        </script>
+        <style is:global> html { scroll-behavior: smooth; } #catalogo { scroll-margin-top: 6rem; } summary::-webkit-details-marker { display: none; } </style>
+    </body>
+</html>
