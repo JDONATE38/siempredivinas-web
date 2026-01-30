@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. ESTO ES LO QUE FALTABA: Generar las rutas para cada subcategoría
+// 1. Generar las rutas para cada subcategoría
 export async function getStaticPaths() {
   const allSubcategories = await getCollection('subcategorias');
   return allSubcategories.map((subcat) => ({
@@ -11,19 +11,30 @@ export async function getStaticPaths() {
   }));
 }
 
-// 2. Recibimos la subcategoría directamente de las props (gracias a la función de arriba)
 const { subcategory } = Astro.props;
 
-// 3. Obtener todos los productos y filtrar por la subcategoría actual
+// 2. Obtener productos y filtrar (LÓGICA ACTUALIZADA PARA LISTAS)
 const allProducts = await getCollection('productos');
 
-// Nota: Comparamos con el título O con el slug por si acaso pusiste uno u otro en el producto
-const productsInSubcategory = allProducts.filter(product => 
-    !product.data.draft && 
-    (product.data.subcategory === subcategory.data.title || product.data.subcategory === subcategory.slug)
-);
+const productsInSubcategory = allProducts.filter(product => {
+    // Si es borrador, fuera
+    if (product.data.draft) return false;
+    
+    // Obtenemos las subcategorías del producto
+    const productSubs = product.data.subcategory;
+    
+    // Si el producto no tiene subcategoría asignada (es opcional), no sale aquí
+    if (!productSubs) return false;
 
-// 4. Preparar los datos para el Layout y el contenido de la página
+    // A. Si es una LISTA (Formato Nuevo): Comprobamos si incluye el título
+    if (Array.isArray(productSubs)) {
+        return productSubs.includes(subcategory.data.title);
+    }
+
+    // B. Si es TEXTO (Formato Antiguo): Comparamos directamente
+    return productSubs === subcategory.data.title || productSubs === subcategory.slug;
+});
+
 const pageTitle = subcategory.data.pageTitle || subcategory.data.title;
 const pageDescription = subcategory.data.description || `Descubre nuestra colección de ${subcategory.data.title} en Siempre Divinas.`;
 const seoTitle = subcategory.data.seoTitle || pageTitle;
