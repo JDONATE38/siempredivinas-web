@@ -15,7 +15,10 @@ description: >-
   ​Pantalones Casual y de Vestir: Sofisticación inmediata para la oficina o cenas, con telas que proyectan elegancia.
 
   ​Pantalones Deportivos: Diseño original y tejidos técnicos para moverte con total libertad y estilo
-parentCategory: ROPA
+parentCategory:
+  - NOVEDADES
+  - REBAJAS
+  - ROPA
 order: 1
 seoTitle: Pantalones Mujer Tiro Alto, Vaqueros y de Vestir | Siempre Divinas
 seoDescription: ¿Pantalones que no te favorecen? Encuentra desde vaqueros de
