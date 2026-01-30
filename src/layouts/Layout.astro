@@ -35,15 +35,8 @@ const subcategories = (await getCollection('subcategorias'))
 const categoriesWithSubcategories = categories.map(cat => {
     const children = subcategories.filter(sub => {
         const parentsRaw = sub.data.parentCategory;
-        
-        // Si no tiene padre, no sale
         if (!parentsRaw) return false;
-
-        // Convertimos a lista siempre
         const parentsList = Array.isArray(parentsRaw) ? parentsRaw : [parentsRaw];
-
-        // Comprobamos si coincide con el Título O con el ID (Slug) de la categoría
-        // Esto es un "doble check" por seguridad
         return parentsList.includes(cat.data.title) || parentsList.includes(cat.slug);
     });
     
@@ -92,7 +85,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 	
     <body class="bg-white text-gray-900 flex flex-col min-h-screen font-sans">
         
-        <header class="bg-white shadow-md sticky top-0 z-50 font-sans relative">
+        <header class="bg-white shadow-md sticky top-0 z-[999] font-sans relative !overflow-visible">
             
             <div class="hidden md:block">
                 <div class="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -108,7 +101,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                     </div>
                 </div>
                 
-                <nav class="bg-gray-100 py-2 border-t border-gray-200">
+                <nav class="bg-gray-100 py-2 border-t border-gray-200 relative z-[1000]">
                     <div class="container mx-auto px-4 flex justify-center gap-8 font-medium text-gray-700 uppercase tracking-wider text-sm">
                         {categoriesWithSubcategories.map((category) => (
                             <div class="relative group py-2">
@@ -118,7 +111,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                                 </a>
                                 
                                 {category.subcategories.length > 0 && (
-                                    <div class="absolute left-1/2 -translate-x-1/2 top-full mt-0 w-48 bg-white shadow-xl rounded-b-md overflow-hidden hidden group-hover:block z-50 border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div class="absolute left-1/2 -translate-x-1/2 top-full mt-0 w-48 bg-white shadow-xl rounded-b-md overflow-hidden hidden group-hover:block z-[1001] border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
                                         {category.subcategories.map((subcat) => (
                                             <a href={`/subcategorias/${subcat.slug}`} class="block px-4 py-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 transition text-sm normal-case border-b border-gray-50 last:border-0">
                                                 {subcat.data.title}
