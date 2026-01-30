@@ -13,7 +13,7 @@ description: >-
   ​Estilo sin esfuerzo: Tendencias actuales listas para combinar con tus básicos.
 
   ​Texturas premium: Tejidos que ofrecen confort y elegancia todo el día.
-order: 1
+order: 2
 seoTitle: "Novedades Ropa Mujer: Viste tu Mejor Versión | Siempre Divinas"
 seoDescription: ¿Tu armario te aburre? Explora nuestras novedades de ropa para
   mujer. Diseños exclusivos para proyectar elegancia y seguridad a diario.
