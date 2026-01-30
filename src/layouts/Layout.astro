@@ -31,7 +31,7 @@ const categories = (await getCollection('categorias'))
 const subcategories = (await getCollection('subcategorias'))
   .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
-// --- LÓGICA DE MENÚ CORREGIDA ---
+// --- LÓGICA DE MENÚ (Múltiples Categorías) ---
 const categoriesWithSubcategories = categories.map(cat => {
     const children = subcategories.filter(sub => {
         const parentsRaw = sub.data.parentCategory;
@@ -109,7 +109,6 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                                     {category.data.title}
                                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
                                 </a>
-                                
                                 {category.subcategories.length > 0 && (
                                     <div class="absolute left-1/2 -translate-x-1/2 top-full mt-0 w-48 bg-white shadow-xl rounded-b-md overflow-hidden hidden group-hover:block z-[1001] border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
                                         {category.subcategories.map((subcat) => (
@@ -130,7 +129,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                     <button id="mobile-menu-btn" class="p-2 text-gray-700 hover:text-pink-600 focus:outline-none z-50"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
                 </div>
                 <a href="/" class="flex-shrink-0 transform hover:scale-105 transition duration-500">
-                    <img src="/img/logo.png" alt="Siempre Divinas" class="h-[65px] w-auto object-contain object-center drop-shadow-sm" width="200" height="100"/>
+                    <img src="/img/logo.png" alt="Siempre Divinas" class="h-[85px] w-auto object-contain object-center drop-shadow-sm" width="200" height="100"/>
                 </a>
                 <div class="flex-1 flex justify-end items-center gap-6">
                     <button onclick="window.dispatchEvent(new Event('toggle-cart'))" class="relative group p-2 hover:bg-gray-100 rounded-full transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-800 group-hover:text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg><span class="cart-count-badge absolute -top-1 -right-1 bg-pink-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden shadow-md border-2 border-white">0</span></button>
