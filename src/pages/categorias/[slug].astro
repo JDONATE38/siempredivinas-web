@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. ESTO ES LO QUE FALTABA: Generar las rutas para cada categoría
 export async function getStaticPaths() {
   const allCategories = await getCollection('categorias');
   return allCategories.map((cat) => ({
@@ -11,25 +10,26 @@ export async function getStaticPaths() {
   }));
 }
 
-// 2. Recibir los datos de la categoría actual
 const { category } = Astro.props;
 
-// 3. Obtener Subcategorías (Esto faltaba definirse en tu código)
-const allSubcategories = await getCollection('subcategorias');
-// Filtramos buscando las subcategorías cuyo "parentCategory" coincida con esta categoría
-const subcategoriesForThisCategory = allSubcategories.filter(subcat => 
-    subcat.data.parentCategory === category.slug || subcat.data.parentCategory === category.id
-);
-
-// 4. Obtener todos los productos y filtrar por la categoría actual
+// Obtener productos y filtrar si la categoría actual está en su lista
 const allProducts = await getCollection('productos');
-// Nota: Usamos 'includes' o comparación directa para buscar la categoría en el producto
-const productsInCategory = allProducts.filter(product => 
-    !product.data.draft && 
-    (product.data.category === category.data.title || product.data.category === category.slug)
-);
+const productsInCategory = allProducts.filter(product => {
+    if (product.data.draft) return false;
+    
+    // Lista de categorías asignadas al producto (puede ser nula, texto o lista)
+    const productCats = product.data.category; 
+    
+    // Si el producto no tiene categorías asignadas (es opcional), no sale aquí
+    if (!productCats) return false;
 
-// 5. Preparar los datos para el Layout
+    // Comprobar si coincide (manejando listas o textos antiguos)
+    if (Array.isArray(productCats)) {
+        return productCats.includes(category.data.title);
+    }
+    return productCats === category.data.title;
+});
+
 const pageTitle = category.data.pageTitle || category.data.title;
 const pageDescription = category.data.description || `Descubre nuestra colección de ${category.data.title} en Siempre Divinas.`;
 const seoTitle = category.data.seoTitle || pageTitle;
@@ -47,25 +47,6 @@ const seoDescription = category.data.seoDescription || pageDescription;
                     {category.data.description}
                 </p>
             )}
-
-            {subcategoriesForThisCategory.length > 0 && (
-                <div class="mb-10">
-                    <h2 class="text-3xl font-serif text-center mb-6 italic">
-                        Explora nuestras <span class="text-pink-400">Subcategorías</span>
-                    </h2>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        {subcategoriesForThisCategory.map((subcat) => (
-                            <a href={`/subcategorias/${subcat.slug}`} class="inline-block bg-gray-100 hover:bg-pink-brand hover:text-white text-gray-800 font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-sm text-sm uppercase">
-                                {subcat.data.title}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            <h2 class="text-3xl font-serif text-center mb-6 italic">
-                Todos los productos de <span class="text-pink-400">{pageTitle}</span>
-            </h2>
 
             {productsInCategory.length === 0 && (
                 <div class="text-center py-10 text-gray-500">
@@ -95,4 +76,3 @@ const seoDescription = category.data.seoDescription || pageDescription;
         </div>
     </main>
 </Layout>
-
