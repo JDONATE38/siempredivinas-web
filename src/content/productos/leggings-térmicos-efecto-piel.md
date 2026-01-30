@@ -1,7 +1,7 @@
 ---
 title: Leggings Térmicos Efecto Piel
 price: 9.99
-category: REBAJAS
+category: ROPA
 subcategory: PANTALONES
 stockStatus: En Stock
 image: /img/20260130_155325_0000.webp
