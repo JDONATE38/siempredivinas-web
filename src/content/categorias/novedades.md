@@ -2,7 +2,7 @@
 title: NOVEDADES
 pageTitle: "Novedades de Ropa para Mujer: Redefine tu Estilo y Confianza"
 description: >-
-  "¿Sientes que tu armario ya no cuenta tu historia? Vestir con ropa que no te
+  ¿Sientes que tu armario ya no cuenta tu historia? Vestir con ropa que no te
   inspira afecta tu seguridad diaria. En Siempre Divinas, creemos que mereces
   verte tan actual y vibrante como te sientes por dentro.
 
