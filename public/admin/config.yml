@@ -35,15 +35,17 @@ collections:
       - {label: "Título de la Página", name: "pageTitle", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
       
-      # VINCULACIÓN: Elegir a qué Categoría pertenece
-      - label: "Categoría Principal"
+      # VINCULACIÓN MÚLTIPLE: Puede pertenecer a varias categorías padres
+      - label: "Categorías Principales (Padres)"
         name: "parentCategory"
         widget: "relation"
         collection: "categorias"
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
-        hint: "Elige la categoría padre (Ej: Si esto es 'Largos', el padre es 'Vestidos')"
+        multiple: true
+        required: false
+        hint: "Elige una o varias categorías donde aparecerá esta subsección."
 
       - {label: "Orden de aparición", name: "order", widget: "number", default: 1}
       - {label: "SEO: Meta Título (Opcional)", name: "seoTitle", widget: "string", required: false}
@@ -57,27 +59,35 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Nombre Producto", name: "title", widget: "string"}
+      
+      # NUEVO: Título de página específico para el producto
+      - {label: "Título de la Página (H1)", name: "pageTitle", widget: "string", required: false, hint: "Opcional. Si lo dejas vacío, usará el Nombre del Producto."}
+      
       - {label: "Precio (€)", name: "price", widget: "number", value_type: "float"}
       
-      # VINCULACIÓN 1: Categoría General
-      - label: "Categoría/Sección"
+      # VINCULACIÓN 1: Categoría General (Múltiple y Opcional)
+      - label: "Categorías"
         name: "category"
         widget: "relation"
         collection: "categorias"
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
+        multiple: true
+        required: false
+        hint: "Selecciona todas las categorías donde quieres que salga el producto."
 
-      # VINCULACIÓN 2: Subcategoría (Corregido)
-      - label: "Subcategoría"
+      # VINCULACIÓN 2: Subcategoría (Múltiple y Opcional)
+      - label: "Subcategorías"
         name: "subcategory"
         widget: "relation"
         collection: "subcategorias"
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
+        multiple: true
         required: false
-        hint: "Opcional. Elige si pertenece a una subsección específica."
+        hint: "Selecciona todas las subcategorías donde quieres que salga."
 
       - {label: "Estado del Stock", name: "stockStatus", widget: "select", options: ["En Stock", "Últimas Unidades", "Agotado"], default: "En Stock"}
       - {label: "Imagen Principal", name: "image", widget: "image"}
