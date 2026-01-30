@@ -32,9 +32,19 @@ const categories = (await getCollection('categorias'))
 const subcategories = (await getCollection('subcategorias'))
   .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
-// Agrupar subcategorías por su categoría principal
+// LÓGICA ACTUALIZADA: Agrupar subcategorías permitiendo múltiples padres
 const categoriesWithSubcategories = categories.map(cat => {
-    const children = subcategories.filter(sub => sub.data.parentCategory === cat.data.title);
+    const children = subcategories.filter(sub => {
+        const parents = sub.data.parentCategory;
+        // Si no tiene padre asignado, no sale
+        if (!parents) return false;
+        // Si es una lista (varios padres), miramos si incluye el actual
+        if (Array.isArray(parents)) {
+            return parents.includes(cat.data.title);
+        }
+        // Si es uno solo (texto antiguo), comparamos directo
+        return parents === cat.data.title;
+    });
     return {
         ...cat,
         subcategories: children
@@ -294,7 +304,6 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                 mobileMenuOverlay.addEventListener('click', closeMobileMenu);
             }
 
-            // Cierra el menú al hacer clic en un enlace dentro de él
             if (mobileSideMenu) {
                 mobileSideMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', closeMobileMenu);
@@ -308,7 +317,6 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
           #catalogo {
             scroll-margin-top: 6rem; 
           }
-          /* Quitar el triángulo por defecto del summary */
           summary::-webkit-details-marker {
               display: none;
           }
