@@ -16,7 +16,6 @@ description: >-
 
   ​Pantalones Deportivos: Diseño original y tejidos técnicos para moverte con total libertad y estilo
 parentCategory:
-  - NOVEDADES
   - ROPA
 order: 1
 seoTitle: Pantalones Mujer Tiro Alto, Vaqueros y de Vestir | Siempre Divinas
