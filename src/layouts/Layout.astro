@@ -25,31 +25,37 @@ const {
     schema
 } = Astro.props;
 
-// Cargar categorías y subcategorías dinámicas para los menús
+// Cargar categorías y subcategorías
 const categories = (await getCollection('categorias'))
   .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
 const subcategories = (await getCollection('subcategorias'))
   .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
-// LÓGICA ACTUALIZADA: Agrupar subcategorías permitiendo múltiples padres
+// --- LÓGICA CORREGIDA ---
+// Agrupar subcategorías permitiendo que tengan múltiples padres
 const categoriesWithSubcategories = categories.map(cat => {
     const children = subcategories.filter(sub => {
         const parents = sub.data.parentCategory;
+        
         // Si no tiene padre asignado, no sale
         if (!parents) return false;
-        // Si es una lista (varios padres), miramos si incluye el actual
+        
+        // Si es una lista (formato nuevo), miramos si incluye el título de esta categoría
         if (Array.isArray(parents)) {
             return parents.includes(cat.data.title);
         }
-        // Si es uno solo (texto antiguo), comparamos directo
+        
+        // Si es texto (formato antiguo), comparamos directamente
         return parents === cat.data.title;
     });
+    
     return {
         ...cat,
         subcategories: children
     };
 });
+// ------------------------
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com/';
@@ -183,7 +189,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                     <img 
                         src="/img/logo.png" 
                         alt="Siempre Divinas" 
-                        class="w-[140px] h-[65px] md:w-[200px] md:h-[100px] object-cover object-center drop-shadow-sm" 
+                        class="h-[65px] w-auto object-contain object-center drop-shadow-sm" 
                         width="200"
                         height="100"
                     />
@@ -304,6 +310,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                 mobileMenuOverlay.addEventListener('click', closeMobileMenu);
             }
 
+            // Cierra el menú al hacer clic en un enlace dentro de él
             if (mobileSideMenu) {
                 mobileSideMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', closeMobileMenu);
@@ -317,6 +324,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
           #catalogo {
             scroll-margin-top: 6rem; 
           }
+          /* Quitar el triángulo por defecto del summary */
           summary::-webkit-details-marker {
               display: none;
           }
