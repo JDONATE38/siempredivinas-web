@@ -18,7 +18,8 @@ description: >-
   ​Elige hoy la calidez que te mereces. Haz clic y encuentra tu nuevo jersey favorito.
 
   ​Despídete de pasar desapercibida bajo capas de ropa. Disfruta de un invierno donde tu estilo brilla tanto como tu seguridad.
-parentCategory: ROPA
+parentCategory:
+  - ROPA
 order: 2
 seoTitle: "Jerseys Mujer Bonitos y Originales | Invierno y Vestir | Siempre Divinas "
 seoDescription: '¿Frío y sin estilo? Descubre nuestro jersey para mujer de
