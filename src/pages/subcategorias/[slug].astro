@@ -2,32 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. ESTO ES LO QUE FALTABA: Generar las rutas para cada subcategoría
 export async function getStaticPaths() {
-  const allSubcategories = await getCollection('subcategorias');
-  return allSubcategories.map((subcat) => ({
-    params: { slug: subcat.slug },
-    props: { subcategory: subcat },
+  const allCategories = await getCollection('categorias');
+  return allCategories.map((cat) => ({
+    params: { slug: cat.slug },
+    props: { category: cat },
   }));
 }
 
-// 2. Recibimos la subcategoría directamente de las props (gracias a la función de arriba)
-const { subcategory } = Astro.props;
+const { category } = Astro.props;
 
-// 3. Obtener todos los productos y filtrar por la subcategoría actual
+// Obtener productos y filtrar si la categoría actual está en su lista
 const allProducts = await getCollection('productos');
+const productsInCategory = allProducts.filter(product => {
+    if (product.data.draft) return false;
+    
+    // Lista de categorías asignadas al producto (puede ser nula, texto o lista)
+    const productCats = product.data.category; 
+    
+    // Si el producto no tiene categorías asignadas (es opcional), no sale aquí
+    if (!productCats) return false;
 
-// Nota: Comparamos con el título O con el slug por si acaso pusiste uno u otro en el producto
-const productsInSubcategory = allProducts.filter(product => 
-    !product.data.draft && 
-    (product.data.subcategory === subcategory.data.title || product.data.subcategory === subcategory.slug)
-);
+    // Comprobar si coincide (manejando listas o textos antiguos)
+    if (Array.isArray(productCats)) {
+        return productCats.includes(category.data.title);
+    }
+    return productCats === category.data.title;
+});
 
-// 4. Preparar los datos para el Layout y el contenido de la página
-const pageTitle = subcategory.data.pageTitle || subcategory.data.title;
-const pageDescription = subcategory.data.description || `Descubre nuestra colección de ${subcategory.data.title} en Siempre Divinas.`;
-const seoTitle = subcategory.data.seoTitle || pageTitle;
-const seoDescription = subcategory.data.seoDescription || pageDescription;
+const pageTitle = category.data.pageTitle || category.data.title;
+const pageDescription = category.data.description || `Descubre nuestra colección de ${category.data.title} en Siempre Divinas.`;
+const seoTitle = category.data.seoTitle || pageTitle;
+const seoDescription = category.data.seoDescription || pageDescription;
 ---
 
 <Layout title={seoTitle} description={seoDescription}>
@@ -36,15 +42,15 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
             <h1 class="text-4xl md:text-5xl font-serif text-center mb-6 italic">
                 <span class="text-pink-400">{pageTitle}</span>
             </h1>
-            {subcategory.data.description && (
+            {category.data.description && (
                 <p class="text-center max-w-3xl mx-auto leading-relaxed text-lg text-gray-700 mb-10">
-                    {subcategory.data.description}
+                    {category.data.description}
                 </p>
             )}
 
-            {productsInSubcategory.length === 0 && (
+            {productsInCategory.length === 0 && (
                 <div class="text-center py-10 text-gray-500">
-                    <p class="text-xl mb-4">¡Ups! Parece que no hay productos en esta subcategoría todavía.</p>
+                    <p class="text-xl mb-4">¡Ups! Parece que no hay productos en esta categoría todavía.</p>
                     <a href="/" class="inline-block bg-pink-brand hover:bg-white hover:text-pink-brand text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-md uppercase text-sm border-2 border-pink-brand">
                         Volver a la página principal
                     </a>
@@ -52,7 +58,7 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
             )}
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {productsInSubcategory.map((product) => (
+                {productsInCategory.map((product) => (
                     <a href={`/productos/${product.slug}`} class="group block">
                         <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 aspect-[3/4] bg-gray-100">
                             <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
@@ -70,4 +76,3 @@ const seoDescription = subcategory.data.seoDescription || pageDescription;
         </div>
     </main>
 </Layout>
-
