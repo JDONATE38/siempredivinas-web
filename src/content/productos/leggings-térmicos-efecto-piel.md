@@ -1,5 +1,6 @@
 ---
-title: Leggings Térmicos Efecto Piel
+title: Leggings Termicos Efecto Piel
+pageTitle: ""
 price: 9.99
 category:
   - ROPA
