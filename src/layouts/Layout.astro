@@ -85,7 +85,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
 	
     <body class="bg-white text-gray-900 flex flex-col min-h-screen font-sans">
         
-        <header class="bg-white shadow-md sticky top-0 z-[999] font-sans relative !overflow-visible">
+        <header class="bg-white shadow-md sticky top-0 z-40 font-sans relative !overflow-visible">
             
             <div class="hidden md:block">
                 <div class="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -130,7 +130,7 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                 </nav>
             </div>
 
-            <div class="md:hidden container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="md:hidden container mx-auto px-4 py-2 flex items-center justify-between">
                 <div class="flex-1 flex justify-start">
                     <button id="mobile-menu-btn" class="p-2 text-gray-700 hover:text-pink-600 focus:outline-none z-50"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
                 </div>
@@ -170,45 +170,3 @@ const logoUrl = new URL('/img/logo.png', siteUrl).toString();
                                     ))}
                                 </div>
                             </details>
-                        ) : (
-                            <a href={`/categorias/${category.slug}`} class="block px-4 py-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 border-b border-gray-100 font-medium transition">{category.data.title}</a>
-                        )
-                    ))}
-                    <a href="/contacto" class="block px-4 py-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 border-b border-gray-100 font-medium transition">Contacto</a>
-                </nav>
-            </div>
-            <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden backdrop-blur-sm"></div>
-        </header>
-
-        <slot />
-
-        <footer class="bg-black text-white py-10 mt-auto">
-            <div class="container mx-auto px-4 text-center"> 
-                <p class="font-serif text-xl mb-6">Siempre Divinas</p>
-                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-400 mb-6">
-                    <a href="/legal/aviso-legal" class="hover:text-white transition">Aviso Legal</a>
-                    <a href="/legal/condiciones-compra" class="hover:text-white transition">Condiciones de Compra</a>
-                    <a href="/legal/politica-privacidad" class="hover:text-white transition">Privacidad</a>
-                    <a href="/legal/politica-cookies" class="hover:text-white transition">Cookies</a>
-                </div>
-                <p class="text-xs text-gray-400">© 2026 Siempre Divinas | Rivas Vaciamadrid</p>
-            </div>
-        </footer>
-        <WhatsAppBtn />
-        <CookieManager />
-        <Cart />
-        <script>
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
-            const mobileSideMenu = document.getElementById('mobile-side-menu');
-            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-            function openMobileMenu() { if (mobileSideMenu && mobileMenuOverlay) { mobileSideMenu.classList.remove('-translate-x-full'); mobileSideMenu.classList.add('translate-x-0'); mobileMenuOverlay.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
-            function closeMobileMenu() { if (mobileSideMenu && mobileMenuOverlay) { mobileSideMenu.classList.remove('translate-x-0'); mobileSideMenu.classList.add('-translate-x-full'); mobileMenuOverlay.classList.add('hidden'); document.body.style.overflow = ''; } }
-            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMobileMenu);
-            if (closeMobileMenuBtn) closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
-            if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-            if (mobileSideMenu) { mobileSideMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', closeMobileMenu); }); }
-        </script>
-        <style is:global> html { scroll-behavior: smooth; } #catalogo { scroll-margin-top: 6rem; } summary::-webkit-details-marker { display: none; } </style>
-    </body>
-</html>
