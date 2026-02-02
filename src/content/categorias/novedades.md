@@ -1,20 +1,16 @@
 ---
 title: NOVEDADES
-pageTitle: "Novedades de Ropa para Mujer: Redefine tu Estilo y Confianza"
-description: >-
-  ¿Sientes que tu armario ya no cuenta tu historia? Vestir con ropa que no te
-  inspira afecta tu seguridad diaria. En Siempre Divinas, creemos que mereces
-  verte tan actual y vibrante como te sientes por dentro.
-
-  ​Hemos seleccionado estas novedades de ropa para mujer para renovar tu energía sin complicaciones:
-
-  ​Ajuste perfecto: Cortes diseñados para realzar tu silueta natural.
-
-  ​Estilo sin esfuerzo: Tendencias actuales listas para combinar con tus básicos.
-
-  ​Texturas premium: Tejidos que ofrecen confort y elegancia todo el día.
+pageTitle: "Novedades: Nueva Colección de Ropa Mujer Elegante y Moderna"
+description: "El problema de la moda convencional es que siempre parece llegar
+  tarde a las tendencias o repetirse hasta el cansancio. En nuestra sección de
+  novedades, la solución es inmediata: una selección exclusiva de ropa diferente
+  para mujer que define el 2026. Desde blusas de estética boho hasta pantalones
+  de corte barrel y tonos amarillo mantequilla, cada prenda es un adelanto de lo
+  que está por venir. Alcanza el éxito: sé la primera en lucir las tendencias
+  que marcan la diferencia y siente la seguridad de llevar un estilo original,
+  fresco y sofisticado."
 order: 2
-seoTitle: "Novedades Ropa Mujer: Viste tu Mejor Versión | Siempre Divinas"
+seoTitle: Novedades Ropa Mujer 2026 | Moda Original y Elegante España
 seoDescription: ¿Tu armario te aburre? Explora nuestras novedades de ropa para
   mujer. Diseños exclusivos para proyectar elegancia y seguridad a diario.
   ¡Renúevate hoy!
