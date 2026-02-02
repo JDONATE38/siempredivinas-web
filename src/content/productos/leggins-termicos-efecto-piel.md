@@ -1,7 +1,7 @@
 ---
 title: Leggins Termicos Efecto piel
 pageTitle: Leggins Térmicos Efecto Piel con Cintura Alta y Control de Abdomen
-price: 9.99
+price: 12
 category:
   - ROPA
   - REBAJAS
