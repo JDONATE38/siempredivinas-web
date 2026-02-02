@@ -8,7 +8,7 @@ category:
 subcategory:
   - PANTALONES
 stockStatus: En Stock
-image: /img/20260202_090045_0000.webp
+image: /img/leggings.webp
 customSizes: S/M, M/L, XL/XLL
 colors:
   - Negro
