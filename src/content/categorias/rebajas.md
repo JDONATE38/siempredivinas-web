@@ -1,24 +1,17 @@
 ---
 title: REBAJAS
-pageTitle: "Rebajas en Ropa de Mujer: Tu Mejor Versión por Menos"
-description: >-
-  ¿Sientes que tu armario necesita aire fresco pero temes gastar de más? No
-  tienes que sacrificar calidad por precio. En [Nombre de la Marca], convertimos
-  las rebajas en tu oportunidad estratégica para reinventarte sin culpa
-  financiera.
-
-  ​Eleva tu estilo hoy mismo:
-
-  ​Compras inteligentes: Adquiere tejidos de alta gama por una fracción de su coste habitual.
-
-  ​Versatilidad total: Prendas diseñadas para combinar entre sí, multiplicando tus opciones cada mañana.
-
-  ​Ajuste favorecedor: Cortes que celebran tu figura y disparan tu seguridad al instante.
-
-  ​No dejes pasar estas oportunidades únicas. Explora la colección y estrena tu nueva versión favorita esta misma semana."
+pageTitle: "Rebajas en Ropa de Mujer: Oportunidades en Diseño y Elegancia"
+description: "El problema de las rebajas suele ser encontrar solo sobras o
+  prendas sin personalidad. En nuestra selección, el desafío desaparece. Te
+  presentamos la solución: una cuidada colección de ropa de mujer elegante y
+  moderna con precios especiales, donde la originalidad sigue siendo la
+  protagonista. Es el momento de adquirir esos pantalones que estilizan o ese
+  jersey de tacto premium que tanto deseabas. Alcanza el éxito: renueva tu
+  vestidor con piezas de alta calidad que te harán sentir única, invirtiendo de
+  forma inteligente en tu mejor versión."
 order: 1
-seoTitle: "Rebajas Ropa Mujer: Estilo Inteligente y Chic | Siempre Divinad"
-seoDescription: ¿Tu armario te aburre pero no quieres gastar de más? Descubre
-  nuestras rebajas en ropa de mujer. Calidad premium y precios únicos para
-  estrenar confianza hoy.
+seoTitle: Rebajas Ropa Mujer Original y Elegante | Ofertas Moda España
+seoDescription: Aprovecha nuestras rebajas en ropa de mujer. Encuentra diseños
+  diferentes, originales y elegantes con descuentos exclusivos. Calidad premium
+  al mejor precio. ¡Stock limitado!
 ---
