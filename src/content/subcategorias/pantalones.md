@@ -1,25 +1,19 @@
 ---
 title: PANTALONES
-pageTitle: "Pantalones de mujer de tiro alto: Estilo y libertad en cada paso"
-description: >-
-  Lidiar con pantalones que se bajan, aprietan o pierden su forma es el
-  "Villano" que arruina tu día. No deberías sacrificar tu comodidad por un
-  diseño que no te entiende. En Siempre Divinas, creamos soluciones textiles que
-  se adaptan a tu cuerpo y a tu agenda, garantizando que cada pieza sea tan
-  única como tú.
-
-  ​Pantalones mujer tiro alto: El corte perfecto para estilizar tu cintura y ganar seguridad en cada movimiento.
-
-  ​Pantalones Vaqueros (Jeans): Denim premium que abraza tus curvas sin perder su estructura original.
-
-  ​Pantalones Casual y de Vestir: Sofisticación inmediata para la oficina o cenas, con telas que proyectan elegancia.
-
-  ​Pantalones Deportivos: Diseño original y tejidos técnicos para moverte con total libertad y estilo
+pageTitle: "Pantalones de Mujer: Elegancia y Corte Impecable para el Día a Día"
+description: "¿Alguna vez has sentido que tus pantalones no te acompañan en tu
+  ritmo diario o que sacrificas comodidad por estilo? El problema de encontrar
+  el ajuste perfecto termina aquí. Nuestra selección de pantalones de mujer es
+  la solución definitiva: desde diseños de tiro alto que estilizan hasta
+  pantalones de pinzas modernos con tejidos de alta calidad. Logra el éxito
+  luciendo una figura impecable y sintiéndote segura, ya sea en una reunión de
+  negocios o en una cena especial. Viste con la confianza de quien domina su
+  estilo."
 parentCategory:
   - ROPA
 order: 1
-seoTitle: Pantalones Mujer Tiro Alto, Vaqueros y de Vestir | Siempre Divinas
-seoDescription: ¿Pantalones que no te favorecen? Encuentra desde vaqueros de
-  tiro alto hasta pantalones de vestir y deportivos. Diseños originales para
-  sentirte única hoy.
+seoTitle: Pantalones de Mujer Elegantes y Modernos | Ropa Diferente España
+seoDescription: Descubre nuestra colección de pantalones para mujer que combinan
+  originalidad y elegancia. Cortes que estilizan, tejidos premium y diseños que
+  no encontrarás en otro lugar. ¡Eleva tu estilo ahora!
 ---
