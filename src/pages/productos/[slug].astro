@@ -26,16 +26,14 @@ const pageDescription = seoDescription ? seoDescription : description;
 // ------------------------------
 
 // --- 2. LA BATIDORA: FUNCIÓN PARA MEZCLAR LISTAS ---
-// Esta función junta los botones estándar con el texto escrito a mano
 function mergeOptions(list, customString) {
-    const listItems = list || []; // Si no ha elegido botones, lista vacía
+    const listItems = list || []; 
     const customItems = customString 
-        ? customString.split(',').map(s => s.trim()).filter(s => s !== '') // Separar por comas y limpiar espacios
+        ? customString.split(',').map(s => s.trim()).filter(s => s !== '') 
         : [];
-    return [...listItems, ...customItems]; // Juntar todo en una sola lista
+    return [...listItems, ...customItems]; 
 }
 
-// Creamos las listas definitivas
 const finalSizes = mergeOptions(sizes, customSizes);
 const finalColors = mergeOptions(colors, customColors);
 // ---------------------------------------------------
@@ -104,13 +102,15 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 </div>
             )}
 
+            {/* IMAGEN PRINCIPAL (Ya tenía alt, correcto) */}
             <img src={image} alt={title} class={`w-full rounded-lg shadow-lg object-cover aspect-[3/4] ${isAgotado ? 'opacity-75 grayscale' : ''}`} id="mainImage"/>
             
+            {/* GALERÍA MINIATURAS (Aquí faltaban los ALT) - CORREGIDO ✅ */}
             <div class="grid grid-cols-4 gap-2">
-                <img src={image} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />
-                {gallery1 && <img src={gallery1} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
-                {gallery2 && <img src={gallery2} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
-                {gallery3 && <img src={gallery3} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+                <img src={image} alt={`Vista principal de ${title}`} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />
+                {gallery1 && <img src={gallery1} alt={`Vista detalle 1 de ${title}`} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+                {gallery2 && <img src={gallery2} alt={`Vista detalle 2 de ${title}`} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
+                {gallery3 && <img src={gallery3} alt={`Vista detalle 3 de ${title}`} class="w-full h-24 object-cover rounded cursor-pointer opacity-70 hover:opacity-100 transition border hover:border-pink-brand" onclick="document.getElementById('mainImage').src = this.src" />}
             </div>
         </div>
 
@@ -125,7 +125,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
             <div class="prose text-gray-600 mb-8"><p>{description}</p></div>
 
-            {/* TALLAS: Usamos finalSizes en lugar de sizes */}
+            {/* TALLAS */}
             {finalSizes && finalSizes.length > 0 && (
                 <div class="mb-6 product-option" data-type="talla">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige tu talla:</label>
@@ -140,7 +140,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 </div>
             )}
 
-            {/* COLORES: Usamos finalColors en lugar de colors */}
+            {/* COLORES */}
             {finalColors && finalColors.length > 0 && (
                 <div class="mb-8 product-option" data-type="color">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige color:</label>
@@ -183,7 +183,8 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                             {p.data.stockStatus === 'Agotado' && <div class="absolute top-0 right-0 bg-red-600 text-white text-xs px-2 py-1 font-bold">AGOTADO</div>}
                             {p.data.stockStatus === 'Últimas Unidades' && <div class="absolute top-0 right-0 bg-orange-500 text-white text-xs px-2 py-1 font-bold animate-pulse">ÚLTIMAS</div>}
                             
-                            <img src={p.data.image} class="w-full aspect-[3/4] object-cover transition duration-500 group-hover:scale-110" />
+                            {/* IMAGEN RELACIONADOS (Faltaba el ALT) - CORREGIDO ✅ */}
+                            <img src={p.data.image} alt={p.data.title} class="w-full aspect-[3/4] object-cover transition duration-500 group-hover:scale-110" loading="lazy" />
                         </div>
                         <p class="font-bold group-hover:text-pink-brand transition">{p.data.title}</p>
                         <p class="text-sm text-gold-600 font-bold">{p.data.price}€</p>
@@ -199,11 +200,9 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     
     if (btn) {
         btn.addEventListener('click', () => {
-            // 1. Obtener valores
             const sizeInput = document.querySelector('input[name="size"]:checked');
             const colorInput = document.querySelector('input[name="color"]:checked');
             
-            // 2. Validaciones (Si existen los bloques de opciones)
             const hasSizes = document.querySelector('.product-option[data-type="talla"]');
             if (hasSizes && !sizeInput) { 
                 alert('⚠️ Por favor, selecciona una TALLA antes de añadir.'); 
@@ -216,7 +215,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 return; 
             }
 
-            // 3. Crear el objeto
             const sizeValue = sizeInput ? sizeInput.value : 'Única';
             const colorValue = colorInput ? colorInput.value : 'Único';
 
@@ -230,7 +228,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 quantity: 1
             };
 
-            // 4. Guardar en LocalStorage
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const existingItemIndex = cart.findIndex(item => item.id === cartItem.id);
 
@@ -242,7 +239,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
             localStorage.setItem('cart', JSON.stringify(cart));
 
-            // 5. Avisar al carrito
             window.dispatchEvent(new Event('cart-updated'));
             window.dispatchEvent(new Event('toggle-cart'));
         });
