@@ -24,6 +24,6 @@ description: "¿Cansada de renunciar a tu estilo por culpa de las bajas
 seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
 seoDescription: Despídete del frío sin perder el estilo. Leggins térmicos efecto
   piel que moldean tu figura en Negro, Beige y Camel. ¡Siéntete sexy y abrigada
-  hoy mismo
+  hoy mismo!
 draft: false
 ---
