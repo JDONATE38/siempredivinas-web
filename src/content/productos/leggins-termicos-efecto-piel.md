@@ -1,5 +1,5 @@
 ---
-title: Leggins Termicos Efecto piel
+title: Leggins Termicos Efecto Piel con Cintura Alta Estilizadora
 pageTitle: Leggins Térmicos Efecto Piel con Cintura Alta y Control de Abdomen
 price: 12
 category:
