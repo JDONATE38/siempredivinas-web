@@ -22,8 +22,8 @@ description: "¿Cansada de renunciar a tu estilo por culpa de las bajas
   soporte de un pantalón de vestir con la comodidad de una segunda piel. Logra
   el éxito: luce impecable, cálida y cómoda en cualquier ocasión."
 seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
-seoDescription: No pases frío para ir elegante. Descubre nuestros leggins efecto
-  piel térmicos con interior de pelito. Cintura alta que estiliza la figura.
-  ¡Envío desde España!
+seoDescription: Despídete del frío sin perder el estilo. Leggins térmicos efecto
+  piel que moldean tu figura en Negro, Beige y Camel. ¡Siéntete sexy y abrigada
+  hoy mismo
 draft: false
 ---
