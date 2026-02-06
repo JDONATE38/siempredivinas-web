@@ -19,7 +19,7 @@ description: >-
   retiene el calor corporal sin añadir volumen extra a tus piernas. ¡Despídete
   de las capas incómodas!
 
-  ​🍑 Cintura Alta Estilizadora: Diseñados con una faja ancha en la cintura que recoge, aplana el vientre y realza tus curvas al instante (Efecto Push Up natural).
+  ​🍑 Cintura Alta Estilizadora: Diseñados con una faja ancha en la cintura que recoge, aplana el vientre y realza tus curvas al instante.
 
   ​✨ Acabado Efecto Piel Premium: Consigue un look rockero y elegante. Ideales para combinar con jerséis oversize, botas militares o tacones para una cena.
 
