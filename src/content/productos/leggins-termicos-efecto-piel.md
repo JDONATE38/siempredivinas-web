@@ -14,7 +14,7 @@ colors:
   - Negro
   - Beige
 customColors: Camel
-description: >
+description: >-
   🔥 Interior Térmico Invisible: Su innovador tejido con interior de pelito
   retiene el calor corporal sin añadir volumen extra a tus piernas. ¡Despídete
   de las capas
@@ -27,12 +27,6 @@ description: >
   Comodidad Total: El tejido elástico se adapta a tu cuerpo como una segunda
   piel, permitiéndote total libertad de movimiento. No aprietan, solo
   moldean.     
-
-  ​
-
-
-  ​
-
 
   ​
 seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
