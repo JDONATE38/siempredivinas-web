@@ -14,13 +14,16 @@ colors:
   - Negro
   - Beige
 customColors: Camel
-description: "¿Cansada de renunciar a tu estilo por culpa de las bajas
-  temperaturas? El problema de elegir entre pasar frío o llevar capas
-  voluminosas termina hoy. Nuestra solución son estos leggins efecto piel con un
-  innovador interior térmico de pelito que mantiene el calor sin perder la
-  sofisticación. Su cintura alta refuerza y estiliza la figura, ofreciendo el
-  soporte de un pantalón de vestir con la comodidad de una segunda piel. Logra
-  el éxito: luce impecable, cálida y cómoda en cualquier ocasión."
+description: >-
+  🔥 Interior Térmico Invisible: Su innovador tejido con interior de pelito
+  retiene el calor corporal sin añadir volumen extra a tus piernas. ¡Despídete
+  de las capas incómodas!
+
+  ​🍑 Cintura Alta Estilizadora: Diseñados con una faja ancha en la cintura que recoge, aplana el vientre y realza tus curvas al instante (Efecto Push Up natural).
+
+  ​✨ Acabado Efecto Piel Premium: Consigue un look rockero y elegante. Ideales para combinar con jerséis oversize, botas militares o tacones para una cena.
+
+  ​☁️ Comodidad Total: El tejido elástico se adapta a tu cuerpo como una segunda piel, permitiéndote total libertad de movimiento. No aprietan, solo moldean.
 seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
 seoDescription: Despídete del frío sin perder el estilo. Leggins térmicos efecto
   piel que moldean tu figura en Negro, Beige y Camel. ¡Siéntete sexy y abrigada
