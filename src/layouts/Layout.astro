@@ -242,5 +242,32 @@ const storeSchema = {
             if (mobileSideMenu) { mobileSideMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', closeMobileMenu); }); }
         </script>
         <style is:global> html { scroll-behavior: smooth; } #catalogo { scroll-margin-top: 6rem; } summary::-webkit-details-marker { display: none; } </style>
-    </body>
+
+        <div id="mantenimiento-layer" class="fixed inset-0 bg-white z-[99999] flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+			<img src="/img/logo.png" alt="Siempre Divinas" class="w-64 mb-8 animate-pulse" />
+			<h1 class="font-serif text-3xl md:text-4xl text-gray-800 mb-4 text-center">Estamos renovando nuestro armario</h1>
+			<p class="text-gray-500 text-center max-w-md">La tienda online abrirá sus puertas muy pronto con la nueva colección.</p>
+			<p class="text-pink-600 mt-8 font-medium">Síguenos en redes para enterarte</p>
+		</div>
+
+		<script is:inline>
+			// 1. Buscamos si hay contraseña en la URL
+			const params = new URLSearchParams(window.location.search);
+			const secreto = params.get('ver'); // La palabra clave es 'ver'
+
+			// 2. Si la contraseña es correcta, guardamos la llave en el navegador
+			if (secreto === 'ahora') {
+				localStorage.setItem('modo_mantenimiento', 'desactivado');
+			}
+
+			// 3. Comprobamos si tiene llave
+			const tieneLlave = localStorage.getItem('modo_mantenimiento') === 'desactivado';
+			const capa = document.getElementById('mantenimiento-layer');
+
+			// 4. Si tiene llave, ocultamos el telón. Si no, lo dejamos puesto.
+			if (tieneLlave) {
+				capa.style.display = 'none';
+			}
+		</script>
+		</body>
 </html>
