@@ -6,5 +6,5 @@ description: ¿Cansada de llevar los mismos zapatos que todo el mundo? Caminar
   quienes buscan piezas únicas que marquen la diferencia en cada paso. Descubre
   nuestra colección de calzado original y diferente, y redefine tu pisada con
   diseños que cuentan tu propia historia.
-order: 5
+order: 1
 ---
