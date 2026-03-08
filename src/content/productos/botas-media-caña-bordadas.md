@@ -1,13 +1,13 @@
 ---
 title: "Botas media caña bordadas "
-pageTitle: ""
+pageTitle: Botas mefia caña bordadas
 price: 20
 category:
-  - CALZADO
-  - ROPA
   - NOVEDADES
+  - CALZADO
 subcategory:
   - BOTAS
+  - PANTALONES
 stockStatus: En Stock
 image: /img/1000208615.webp
 gallery1: /img/1000208611.webp
