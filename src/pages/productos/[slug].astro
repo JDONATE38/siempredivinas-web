@@ -13,8 +13,8 @@ const { entry } = Astro.props;
 
 // 1. RECUPERAMOS LOS DATOS
 const { 
-    title,       // <-- Nombre Corto (Para Menús, Dominio y Alt de fotos)
-    pageTitle,   // <-- Título Largo (Solo para el H1 de la página)
+    title,       
+    pageTitle,   
     price, description, image, 
     sizes, customSizes, 
     colors, customColors, 
@@ -23,25 +23,35 @@ const {
 } = entry.data;
 
 // --- LÓGICA: QUÉ TÍTULO USAR DÓNDE ---
-
-// A. Título para la Pestaña del Navegador (Dominio/SEO)
-// Instrucción: Usar el nombre corto (o el SEO Title si lo has rellenado específicamente)
 const browserTitle = seoTitle ? seoTitle : `${title} | Siempre Divinas`;
-
-// B. Descripción para Google
 const browserDescription = seoDescription ? seoDescription : description;
 
-// --- MEZCLA DE TALLAS Y COLORES ---
-function mergeOptions(list, customString) {
-    const listItems = list || []; 
-    const customItems = customString 
-        ? customString.split(',').map(s => s.trim()).filter(s => s !== '') 
-        : [];
-    return [...listItems, ...customItems]; 
+// --- MEZCLA DE TALLAS Y COLORES (CORREGIDO) ---
+function processOptions(input) {
+    if (!input) return [];
+    // Si viene como un texto ("S, M, L"), lo partimos por las comas
+    if (typeof input === 'string') {
+        return input.split(',').map(item => item.trim()).filter(item => item !== '');
+    }
+    // Si ya es un array (lista antigua), lo devolvemos tal cual
+    if (Array.isArray(input)) {
+        return input;
+    }
+    return [];
 }
 
-const finalSizes = mergeOptions(sizes, customSizes);
-const finalColors = mergeOptions(colors, customColors);
+// 1. Procesamos los campos principales (que ahora vienen del CMS como texto separado por comas)
+const mainSizesList = processOptions(sizes);
+const mainColorsList = processOptions(colors);
+
+// 2. Procesamos los campos "custom" antiguos por si algún producto viejo los sigue usando
+const customSizesList = processOptions(customSizes);
+const customColorsList = processOptions(customColors);
+
+// 3. Juntamos todo en una sola lista (y usamos Set para quitar duplicados, por si acaso)
+const finalSizes = [...new Set([...mainSizesList, ...customSizesList])];
+const finalColors = [...new Set([...mainColorsList, ...customColorsList])];
+
 
 const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com';
 const imageUrl = new URL(image, siteUrl).toString();
@@ -92,6 +102,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     </nav>
 
     <div class="grid md:grid-cols-2 gap-12">
+        {/* === ZONA DE IMÁGENES === */}
         <div class="space-y-4 relative">
             
             {isAgotado && (
@@ -105,7 +116,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 </div>
             )}
 
-            {/* FOTOS: Usan '{title}' (Nombre corto) para el ALT, que es lo mejor para Google */}
             <img src={image} alt={title} class={`w-full rounded-lg shadow-lg object-cover aspect-[3/4] ${isAgotado ? 'opacity-75 grayscale' : ''}`} id="mainImage"/>
             
             <div class="grid grid-cols-4 gap-2">
@@ -116,6 +126,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
             </div>
         </div>
 
+        {/* === ZONA DE INFORMACIÓN Y COMPRA === */}
         <div>
             <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">{pageTitle || title}</h1>
             
@@ -128,7 +139,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
             <div class="prose text-gray-600 mb-8"><p>{description}</p></div>
 
             {/* TALLAS */}
-            {finalSizes && finalSizes.length > 0 && (
+            {finalSizes.length > 0 && (
                 <div class="mb-6 product-option" data-type="talla">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige tu talla:</label>
                     <div class="flex gap-3 flex-wrap">
@@ -143,7 +154,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
             )}
 
             {/* COLORES */}
-            {finalColors && finalColors.length > 0 && (
+            {finalColors.length > 0 && (
                 <div class="mb-8 product-option" data-type="color">
                     <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-500">Elige color:</label>
                     <div class="flex gap-3 flex-wrap">
@@ -175,6 +186,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
         </div>
     </div>
 
+    {/* === PRODUCTOS RELACIONADOS === */}
     {relatedProducts.length > 0 && (
         <section class="mt-20 border-t pt-10">
             <h3 class="text-2xl font-serif font-bold mb-6 text-center">También te puede gustar</h3>
@@ -196,6 +208,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     )}
   </main>
 
+  {/* SCRIPT DEL CARRITO */}
   <script define:vars={{ entry }}>
     const btn = document.getElementById('add-to-cart-btn');
     
