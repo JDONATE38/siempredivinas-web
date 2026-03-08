@@ -1,5 +1,5 @@
 ---
-title: calzado
+title: CALZADO
 pageTitle: Calzado
 description: ¿Cansada de llevar los mismos zapatos que todo el mundo? Caminar
   con distinción sin renunciar a la comodidad no debería ser una excepción.
