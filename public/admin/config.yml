@@ -8,6 +8,11 @@ backend:
 media_folder: "public/img"
 public_folder: "/img"
 locale: "es"
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
 
 collections:
   # 1. COLECCIÓN CATEGORÍAS (Padres)
