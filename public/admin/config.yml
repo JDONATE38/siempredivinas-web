@@ -96,12 +96,10 @@ collections:
       - {label: "Foto Auxiliar 3 (Opcional)", name: "gallery3", widget: "image", required: false}
       
       # --- TALLAS Y COLORES ---
-      - {label: "Tallas (Selección Rápida)", name: "sizes", widget: "select", multiple: true, required: false, options: ["XS","S","M","L","XL","XXL","Única"]}
-      - {label: "Otras Tallas (Manual)", name: "customSizes", widget: "string", required: false, hint: "Ej: 34, 46. Separar por comas."}
+      - {label: "Tallas", name: "sizes", widget: "string", required: false, hint: "Escribe las tallas separadas por comas. Ej: S, M, L, Única, 42"}
       
-      - {label: "Colores (Selección Rápida)", name: "colors", widget: "select", multiple: true, required: false, options: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Rosa", "Beige", "Amarillo", "Estampado", "Oro", "Plata"]}
-      - {label: "Otros Colores (Manual)", name: "customColors", widget: "string", required: false, hint: "Ej: Fucsia, Topos. Separar por comas."}
-
+      - {label: "Colores", name: "colors", widget: "string", required: false, hint: "Escribe los colores separados por comas. Ej: Rojo, Negro, Estampado Floral"}
+      
       - {label: "Descripción", name: "description", widget: "text"}
       
       # --- SEO ---
