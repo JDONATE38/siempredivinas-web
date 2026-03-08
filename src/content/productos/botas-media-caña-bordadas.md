@@ -10,7 +10,8 @@ stockStatus: En Stock
 image: /img/1000208615.webp
 gallery1: /img/1000208611.webp
 gallery2: /img/1000208612.webp
-sizes: null
+sizes:
+  - Única
 customSizes: 36, 37, 38, 39, 40
 description: |-
   Botas media caña con diseño bordado.nuevas.
