@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://siempredivinas.com',
   integrations: [tailwind(), sitemap()],
   build: {
-    inlineStylesheets: 'always' // Pega el CSS directamente para eliminar el archivo contacto.css de la red
+    inlineStylesheets: 'always', // <-- Ojo, le hemos añadido una coma aquí al final
+    format: 'file'               // <-- Y ESTA ES LA LÍNEA NUEVA
   }
 });
