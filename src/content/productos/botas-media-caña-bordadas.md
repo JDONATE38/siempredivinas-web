@@ -20,5 +20,5 @@ description: |-
   Ideales para diario y vestir.
   Llevan cremallera lateral para poner y quitar fácilmente.
   Números del 36 al 41.
-draft: true
+draft: false
 ---
