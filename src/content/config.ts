@@ -19,10 +19,10 @@ const productosCollection = defineCollection({
         gallery2: z.string().optional(),
         gallery3: z.string().optional(),
         
-        sizes: z.array(z.string()).optional(),
+        sizes: z.union([z.string(), z.array(z.string())]).optional(),
         customSizes: z.string().optional(),
 
-        colors: z.array(z.string()).optional(),
+        colors: z.union([z.string(), z.array(z.string())]).optional(),
         customColors: z.string().optional(),
 
         description: z.string(),
