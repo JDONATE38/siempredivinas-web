@@ -8,5 +8,5 @@ description: ¿Cansada de las botas de siempre que no dicen nada de ti? Encontra
   el estilo que mereces.
 parentCategory:
   - CALZADO
-order: 1
+order: 3
 ---
