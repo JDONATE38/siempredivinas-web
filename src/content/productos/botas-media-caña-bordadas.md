@@ -1,5 +1,6 @@
 ---
 title: "Botas media caña bordadas "
+pageTitle: ""
 price: 20
 category:
   - NOVEDADES
@@ -13,6 +14,8 @@ gallery2: /img/1000208612.webp
 sizes:
   - Única
 customSizes: 36, 37, 38, 39, 40
+colors:
+  - Beige
 description: |-
   Botas media caña con diseño bordado.nuevas.
   Color beige/ taupe que combina con todo.
