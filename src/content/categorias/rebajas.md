@@ -9,7 +9,7 @@ description: "El problema de las rebajas suele ser encontrar solo sobras o
   jersey de tacto premium que tanto deseabas. Alcanza el éxito: renueva tu
   vestidor con piezas de alta calidad que te harán sentir única, invirtiendo de
   forma inteligente en tu mejor versión."
-order: 1
+order: 4
 seoTitle: Rebajas Ropa Mujer Original y Elegante | Ofertas Moda España
 seoDescription: Aprovecha nuestras rebajas en ropa de mujer. Encuentra diseños
   diferentes, originales y elegantes con descuentos exclusivos. Calidad premium
