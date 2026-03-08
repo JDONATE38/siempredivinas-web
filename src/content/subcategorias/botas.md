@@ -1,5 +1,6 @@
 ---
 title: BOTAS
+pageTitle: Botas
 description: ¿Cansada de las botas de siempre que no dicen nada de ti? Encontrar
   el equilibrio entre resistencia y máxima elegancia no debería ser un desafío.
   Hemos seleccionado botas de mujer con diseño español, pensadas para quienes
