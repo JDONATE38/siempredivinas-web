@@ -1,5 +1,5 @@
 ---
-title: Alpargatas de cuña negras con pulsera y tachuelas | Siempre Divinas
+title: Alpargatas de cuña negras con pulsera y tachuelas
 price: 18.99
 category:
   - CALZADO
