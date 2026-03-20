@@ -4,9 +4,9 @@ price: 18.99
 category:
   - CALZADO
 stockStatus: En Stock
-image: /img/1000222168.png
-gallery1: /img/1000222150.png
-gallery2: /img/1000222169.png
+image: /img/1000222192.webp
+gallery1: /img/1000222191.webp
+gallery2: /img/1000222198.webp
 sizes: 36, 37, 38, 39, 40, 41
 colors: Negro
 description: >-
