@@ -1,5 +1,5 @@
 ---
-title: LEGGINS TERMICOS DE CAMPANA
+title: "Leggins termicos de campana "
 price: 12
 category:
   - REBAJAS
