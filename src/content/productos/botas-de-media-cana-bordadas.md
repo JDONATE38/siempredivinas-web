@@ -5,6 +5,7 @@ price: 20
 category:
   - NOVEDADES
   - CALZADO
+  - OTOÑO-INVIERNO
 subcategory:
   - BOTAS
 stockStatus: En Stock
