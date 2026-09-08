@@ -1,5 +1,5 @@
 ---
-title: DEPORTIVAS MARRONES Y ROSAS
+title: Deportivas marrones y rosas
 price: 20
 category:
   - CALZADO
