@@ -9,5 +9,6 @@ description: ¿Cansada de las botas de siempre que no dicen nada de ti? Encontra
   el estilo que mereces.
 parentCategory:
   - CALZADO
+  - OTOÑO-INVIERNO
 order: 3
 ---
