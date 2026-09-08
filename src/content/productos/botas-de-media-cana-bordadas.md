@@ -6,7 +6,6 @@ category:
   - OTOÑO-INVIERNO
 subcategory:
   - CALZADO 2
-  - BOTAS
 stockStatus: En Stock
 image: /img/1000208615.webp
 gallery1: /img/1000208611.webp
