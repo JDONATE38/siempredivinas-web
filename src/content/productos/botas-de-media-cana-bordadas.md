@@ -3,9 +3,9 @@ title: Botas de media caña bordadas
 pageTitle: Botas de media caña bordadas
 price: 20
 category:
-  - OTOÑO-INVIERNO
+  - CALZADO
 subcategory:
-  - CALZADO 2
+  - BOTAS
 stockStatus: En Stock
 image: /img/1000208615.webp
 gallery1: /img/1000208611.webp
