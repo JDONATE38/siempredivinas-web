@@ -6,7 +6,7 @@ category:
 subcategory:
   - PANTALONES
 stockStatus: En Stock
-image: /img/1000208602.webp
+image: /img/1000355105.webp
 gallery1: /img/1000214277.webp
 gallery2: /img/1000214278.webp
 gallery3: /img/1000214279.webp
