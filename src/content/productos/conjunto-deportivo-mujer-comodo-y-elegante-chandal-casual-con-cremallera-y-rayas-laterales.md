@@ -5,9 +5,9 @@ price: 15.9
 category:
   - ROPA
 stockStatus: En Stock
-image: /img/1000214259.webp
-gallery1: /img/1000214257.webp
-gallery2: /img/1000214258.webp
+image: /img/1000355100.webp
+gallery1: /img/1000355099.webp
+gallery2: /img/1000355098.webp
 sizes: S/M, M/L, XL/XXL
 colors: Negro, Azul claro, Gris
 description: >-
