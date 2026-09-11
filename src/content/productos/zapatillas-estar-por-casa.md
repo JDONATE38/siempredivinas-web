@@ -9,7 +9,7 @@ gallery1: /img/1000354070.webp
 gallery2: /img/1000354080.png
 gallery3: /img/1000354074.webp
 sizes: 36, 37, 38, 39, 40, 41
-colors: "Azul marino, rosa, gris, "
+colors: Azul marino, rosa, gris, lila
 description: >-
   Disfruta de la comodidad en casa con las Zapatillas de Casa Good Luck, un
   modelo suave, calentito y lleno de encanto. Su diseño incorpora un bonito
