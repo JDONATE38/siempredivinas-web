@@ -9,8 +9,8 @@ subcategory:
   - BOTAS
 stockStatus: En Stock
 image: /img/1000354736.webp
-gallery1: /img/1000354802.webp
-gallery2: /img/1000354806.webp
+gallery1: /img/1000355082.webp
+gallery2: /img/1000355066.webp
 sizes: 36, 37, 38, 39, 40, 41
 colors: Taupe
 description: |-
