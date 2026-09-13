@@ -24,7 +24,7 @@ seoTitle: Camiseta Mujer Cuello Cascada con Collar – Blusa Elegante de Manga L
 seoDescription: >-
   Descubre esta preciosa camiseta para mujer de manga larga con elegante cuello
   cascada, una prenda cómoda y favorecedora que podrás llevar tanto en tus looks
-  ყოველდღianos como en ocasiones más especiales.
+  cotidianos como en ocasiones más especiales.
 
   Su diseño destaca por el escote drapeado, que aporta un toque elegante y femenino, y por su bonito collar decorativo, creando un look sofisticado sin necesidad de añadir muchos complementos.
 
