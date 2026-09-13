@@ -5,7 +5,6 @@ pageTitle: Leggins Térmicos Efecto Piel con Cintura Alta Estilizadora
 price: 12
 category:
   - ROPA
-  - REBAJAS
 subcategory:
   - PANTALONES
 stockStatus: En Stock
@@ -28,11 +27,9 @@ description: >-
 seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
 draft: false
 customSizes: S/M, M/L, XL/XLL
-image: /img/1000208603.webp
+image: /img/1000355663.webp
 sizes: Talla unica
-colors:
-  - Negro
-  - Beige
+colors: Negro, Beige, Camel
 seoDescription: Despídete del frío sin perder el estilo. Leggins térmicos efecto
   piel que moldean tu figura en Negro, Beige y Camel. ¡Siéntete sexy y abrigada
   hoy mismo!
