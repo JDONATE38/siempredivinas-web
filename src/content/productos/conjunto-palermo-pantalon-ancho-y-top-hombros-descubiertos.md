@@ -51,5 +51,5 @@ seoDescription: >-
   ✨ Colores tendencia temporada
 
   ✨ Ideal para looks casual y elegantes
-draft: false
+draft: true
 ---
