@@ -28,7 +28,7 @@ seoTitle: Leggins Térmicos Efecto Piel Mujer | Cintura Alta y Forro Polar
 draft: false
 customSizes: S/M, M/L, XL/XLL
 image: /img/1000355663.webp
-sizes: Talla unica
+sizes: XS/S, M/L, L/XL
 colors: Negro, Beige, Camel
 seoDescription: >-
   Descubre nuestros leggings térmicos para mujer, ideales para ir cómoda,
