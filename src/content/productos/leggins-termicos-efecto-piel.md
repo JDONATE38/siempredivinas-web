@@ -30,7 +30,15 @@ customSizes: S/M, M/L, XL/XLL
 image: /img/1000355663.webp
 sizes: Talla unica
 colors: Negro, Beige, Camel
-seoDescription: Despídete del frío sin perder el estilo. Leggins térmicos efecto
-  piel que moldean tu figura en Negro, Beige y Camel. ¡Siéntete sexy y abrigada
-  hoy mismo!
+seoDescription: >-
+  Descubre nuestros leggings térmicos para mujer, ideales para ir cómoda,
+  estilosa y protegida del frío durante los días de otoño e invierno. Su diseño
+  ajustado y de cintura alta ayuda a realzar la figura y permite crear looks
+  cómodos y modernos para cualquier ocasión.
+
+  Perfectos para combinar con jerseys, camisetas, sudaderas, botas o deportivas, estos leggings se convertirán en un básico imprescindible de tu armario.
+
+  ✨ Moda cómoda, favorecedora y calentita para disfrutar del invierno sin renunciar al estilo.
+
+  En Siempre Divinas apostamos por prendas actuales, de buena calidad y a precios asequibles, porque ir a la moda no tiene por qué costarte un riñón. 💖
 ---
