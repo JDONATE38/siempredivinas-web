@@ -1,5 +1,5 @@
 ---
-title: "Jersey rombos cuello perkins "
+title: Jersey rombos cuello perkins
 price: 15
 category:
   - ROPA
