@@ -8,7 +8,7 @@ image: /img/1000356858.webp
 gallery1: /img/1000356857.webp
 gallery2: /img/1000356856.webp
 sizes: "Talla única "
-colors: "Negro, beige, granate, marrón chocolate "
+colors: Negro, beige, granate, marrón
 description: |
   ✨ NUEVOS JERSEYS EN TIENDA ✨
   Suaves, calentitos y con un brillo sutil que los hace especiales ✨
