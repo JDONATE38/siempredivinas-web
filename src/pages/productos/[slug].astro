@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('productos');
@@ -85,6 +86,33 @@ const productSchema = JSON.stringify({
   }
 });
 
+const allCategories = await getCollection('categorias');
+const allSubcategories = await getCollection('subcategorias');
+
+const productCategoryNames = entry.data.category
+  ? (Array.isArray(entry.data.category) ? entry.data.category : [entry.data.category])
+  : [];
+
+const productSubcategoryNames = entry.data.subcategory
+  ? (Array.isArray(entry.data.subcategory) ? entry.data.subcategory : [entry.data.subcategory])
+  : [];
+
+const matchedCategory = allCategories.find(cat =>
+  productCategoryNames.includes(cat.data.title) || productCategoryNames.includes(cat.slug)
+);
+
+const matchedSubcategory = allSubcategories.find(sub =>
+  productSubcategoryNames.includes(sub.data.title) || productSubcategoryNames.includes(sub.slug)
+);
+
+const breadcrumbItems = [];
+if (matchedCategory) {
+  breadcrumbItems.push({ name: matchedCategory.data.title, url: `/categorias/${matchedCategory.slug}` });
+}
+if (matchedSubcategory) {
+  breadcrumbItems.push({ name: matchedSubcategory.data.title, url: `/subcategorias/${matchedSubcategory.slug}` });
+}
+breadcrumbItems.push({ name: pageTitle || title });
 const allProducts = await getCollection('productos');
 const relatedProducts = allProducts.filter(p => p.slug !== entry.slug).slice(0, 3);
 
@@ -95,11 +123,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 <Layout title={browserTitle} description={browserDescription} image={image} schema={productSchema}>
   
   <main class="container mx-auto px-4 py-12">
-    <nav class="text-sm text-gray-500 mb-8 flex items-center gap-2">
-      <a href="/" class="hover:text-pink-600">Inicio</a> <span>&gt;</span>
-      <a href="/#catalogo" class="hover:text-pink-600">Catálogo</a> <span>&gt;</span>
-      <span class="font-bold text-gray-900">{title}</span>
-    </nav>
+    <Breadcrumbs items={breadcrumbItems} />
 
     <div class="grid md:grid-cols-2 gap-12">
         {/* === ZONA DE IMÁGENES === */}
