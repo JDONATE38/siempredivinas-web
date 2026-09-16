@@ -1,0 +1,57 @@
+---
+// src/components/Breadcrumbs.astro
+//
+// Miga de pan visual + Schema.org BreadcrumbList.
+// Se le pasa una lista de "crumbs" ya resueltos (nombre + url).
+// El último elemento NO debe llevar url (es la página actual).
+//
+// Ejemplo de uso:
+// <Breadcrumbs items={[
+//   { name: 'Ropa', url: '/categorias/ropa' },
+//   { name: 'Vestidos', url: '/subcategorias/vestidos' },
+//   { name: 'Camiseta cuello cascada' } // sin url = página actual
+// ]} />
+
+interface Crumb {
+  name: string;
+  url?: string; // si no se pasa, se asume que es el último (página actual)
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://siempredivinas.com';
+
+// Construimos la lista completa incluyendo "Inicio" al principio
+const fullItems: Crumb[] = [{ name: 'Inicio', url: '/' }, ...items];
+
+// Generamos el schema BreadcrumbList
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": fullItems.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.name,
+    ...(item.url ? { "item": new URL(item.url, siteUrl).toString() } : {})
+  }))
+};
+---
+
+<nav aria-label="Miga de pan" class="text-sm text-gray-500 mb-8 flex flex-wrap items-center gap-2">
+  {fullItems.map((item, index) => (
+    <Fragment>
+      {index > 0 && <span aria-hidden="true">&gt;</span>}
+      {item.url ? (
+        <a href={item.url} class="hover:text-pink-600 transition">{item.name}</a>
+      ) : (
+        <span class="font-bold text-gray-900" aria-current="page">{item.name}</span>
+      )}
+    </Fragment>
+  ))}
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
