@@ -3,6 +3,8 @@ title: Jerseys mohair rayas
 price: 15
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000356858.webp
 gallery1: /img/1000356857.webp
