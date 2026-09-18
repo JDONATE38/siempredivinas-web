@@ -4,7 +4,7 @@ price: 12
 category:
   - ROPA
 subcategory:
-  - PANTALONES
+  - LEGGINGS
 stockStatus: En Stock
 image: /img/1000355105.webp
 gallery1: /img/1000355117.webp
