@@ -3,6 +3,8 @@ title: Jerseys finos termicos
 price: 12
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000356533.webp
 gallery1: /img/1000356530.webp
