@@ -3,6 +3,8 @@ title: Botas de pelo estilo ugg
 price: 23
 category:
   - CALZADO
+subcategory:
+  - BOTAS
 stockStatus: En Stock
 image: /img/1000352463.webp
 gallery1: /img/1000352476.webp
