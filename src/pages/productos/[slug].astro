@@ -232,54 +232,150 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     )}
   </main>
 
-  {/* SCRIPT DEL CARRITO */}
-  <script define:vars={{ entry }}>
-    const btn = document.getElementById('add-to-cart-btn');
-    
-    if (btn) {
-        btn.addEventListener('click', () => {
-            const sizeInput = document.querySelector('input[name="size"]:checked');
-            const colorInput = document.querySelector('input[name="color"]:checked');
-            
-            const hasSizes = document.querySelector('.product-option[data-type="talla"]');
-            if (hasSizes && !sizeInput) { 
-                alert('⚠️ Por favor, selecciona una TALLA antes de añadir.'); 
-                return; 
-            }
+  {/* SUSTITUIR el <script define:vars={{ entry }}> completo (el del carrito) por este: */}
 
-            const hasColors = document.querySelector('.product-option[data-type="color"]');
-            if (hasColors && !colorInput) { 
-                alert('⚠️ Por favor, selecciona un COLOR antes de añadir.'); 
-                return; 
-            }
+<script define:vars={{ entry, productSlug: entry.slug }}>
+  let stockData = []; // se rellena al cargar la página
 
-            const sizeValue = sizeInput ? sizeInput.value : 'Única';
-            const colorValue = colorInput ? colorInput.value : 'Único';
-
-            const cartItem = {
-                id: entry.slug + '-' + sizeValue + '-' + colorValue,
-                title: entry.data.title,
-                price: entry.data.price,
-                image: entry.data.image,
-                size: sizeValue,
-                color: colorValue,
-                quantity: 1
-            };
-
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const existingItemIndex = cart.findIndex(item => item.id === cartItem.id);
-
-            if (existingItemIndex > -1) {
-                cart[existingItemIndex].quantity += 1;
-            } else {
-                cart.push(cartItem);
-            }
-
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            window.dispatchEvent(new Event('cart-updated'));
-            window.dispatchEvent(new Event('toggle-cart'));
-        });
+  // --- 1. Cargar el stock real de este producto ---
+  async function loadStock() {
+    try {
+      const res = await fetch(`/api/stock/${productSlug}`);
+      stockData = await res.json();
+      updateAvailability();
+    } catch (err) {
+      console.error('No se pudo cargar el stock:', err);
+      // Si falla, no bloqueamos nada (mejor pecar de permisivo que romper la venta)
     }
-  </script>
+  }
+
+  // Busca la cantidad disponible para una combinación concreta
+  function getQuantity(size, color) {
+    const match = stockData.find(row => row.size === size && row.color === color);
+    return match ? match.quantity : 0;
+  }
+
+  // --- 2. Pintar qué tallas/colores están disponibles según lo ya seleccionado ---
+  function updateAvailability() {
+    if (stockData.length === 0) return; // todavía no ha cargado, o no hay filas de stock
+
+    const sizeInputs = document.querySelectorAll('input[name="size"]');
+    const colorInputs = document.querySelectorAll('input[name="color"]');
+
+    const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
+    const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
+
+    // Si el producto tiene tallas, comprobamos cada una contra el color ya elegido (o "Único")
+    sizeInputs.forEach(input => {
+      const colorToCheck = selectedColor || 'Único';
+      const qty = getQuantity(input.value, colorToCheck);
+      setOptionDisabled(input, qty <= 0);
+    });
+
+    // Si el producto tiene colores, comprobamos cada uno contra la talla ya elegida (o "Única")
+    colorInputs.forEach(input => {
+      const sizeToCheck = selectedSize || 'Única';
+      const qty = getQuantity(sizeToCheck, input.value);
+      setOptionDisabled(input, qty <= 0);
+    });
+
+    updateAddToCartButton();
+  }
+
+  // Desactiva visualmente una opción (radio) sin stock
+  function setOptionDisabled(input, disabled) {
+    input.disabled = disabled;
+    const label = input.closest('label');
+    if (label) {
+      label.classList.toggle('opacity-40', disabled);
+      label.classList.toggle('cursor-not-allowed', disabled);
+      label.classList.toggle('pointer-events-none', disabled);
+    }
+    // Si estaba seleccionada y ya no hay stock, la deseleccionamos
+    if (disabled && input.checked) {
+      input.checked = false;
+    }
+  }
+
+  // Desactiva el botón de compra si la combinación elegida no tiene stock
+  function updateAddToCartButton() {
+    const btn = document.getElementById('add-to-cart-btn');
+    if (!btn) return;
+
+    const hasSizes = document.querySelector('.product-option[data-type="talla"]');
+    const hasColors = document.querySelector('.product-option[data-type="color"]');
+
+    const selectedSize = document.querySelector('input[name="size"]:checked')?.value || (hasSizes ? null : 'Única');
+    const selectedColor = document.querySelector('input[name="color"]:checked')?.value || (hasColors ? null : 'Único');
+
+    // Si falta elegir talla o color obligatorios, dejamos el botón activo
+    // (el aviso de "selecciona talla/color" ya lo gestiona el click de más abajo)
+    if (!selectedSize || !selectedColor) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      return;
+    }
+
+    const qty = getQuantity(selectedSize, selectedColor);
+    btn.disabled = qty <= 0;
+    btn.classList.toggle('opacity-50', qty <= 0);
+    btn.classList.toggle('cursor-not-allowed', qty <= 0);
+  }
+
+  // Recalcular disponibilidad cada vez que el usuario cambia talla o color
+  document.querySelectorAll('input[name="size"], input[name="color"]').forEach(input => {
+    input.addEventListener('change', updateAvailability);
+  });
+
+  loadStock();
+
+  // --- 3. Lógica original del carrito (sin cambios) ---
+  const btn = document.getElementById('add-to-cart-btn');
+
+  if (btn) {
+      btn.addEventListener('click', () => {
+          const sizeInput = document.querySelector('input[name="size"]:checked');
+          const colorInput = document.querySelector('input[name="color"]:checked');
+
+          const hasSizes = document.querySelector('.product-option[data-type="talla"]');
+          if (hasSizes && !sizeInput) {
+              alert('⚠️ Por favor, selecciona una TALLA antes de añadir.');
+              return;
+          }
+
+          const hasColors = document.querySelector('.product-option[data-type="color"]');
+          if (hasColors && !colorInput) {
+              alert('⚠️ Por favor, selecciona un COLOR antes de añadir.');
+              return;
+          }
+
+          const sizeValue = sizeInput ? sizeInput.value : 'Única';
+          const colorValue = colorInput ? colorInput.value : 'Único';
+
+          const cartItem = {
+              id: entry.slug + '-' + sizeValue + '-' + colorValue,
+              title: entry.data.title,
+              price: entry.data.price,
+              image: entry.data.image,
+              size: sizeValue,
+              color: colorValue,
+              quantity: 1
+          };
+
+          let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          const existingItemIndex = cart.findIndex(item => item.id === cartItem.id);
+
+          if (existingItemIndex > -1) {
+              cart[existingItemIndex].quantity += 1;
+          } else {
+              cart.push(cartItem);
+          }
+
+          localStorage.setItem('cart', JSON.stringify(cart));
+
+          window.dispatchEvent(new Event('cart-updated'));
+          window.dispatchEvent(new Event('toggle-cart'));
+      });
+  }
+</script>
 </Layout>
