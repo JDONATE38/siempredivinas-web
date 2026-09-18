@@ -3,6 +3,8 @@ title: Jerseys de punto cuello perkins
 price: 15
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000356585.webp
 gallery1: /img/1000356589.webp
