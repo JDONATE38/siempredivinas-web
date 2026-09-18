@@ -3,6 +3,8 @@ title: "Jersey mohair botones "
 price: 15
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000358817.webp
 gallery1: /img/1000358823.webp
