@@ -328,6 +328,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
   });
 
   loadStock();
+setInterval(loadStock, 15000); // vuelve a consultar el stock cada 15 segundos
 
   // --- 3. Lógica original del carrito (sin cambios) ---
   const btn = document.getElementById('add-to-cart-btn');
