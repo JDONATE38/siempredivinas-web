@@ -3,6 +3,8 @@ title: Jersey rombos cuello perkins
 price: 15
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000356650.webp
 gallery1: /img/1000356651.webp
