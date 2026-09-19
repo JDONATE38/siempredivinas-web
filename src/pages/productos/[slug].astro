@@ -237,6 +237,11 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 <script define:vars={{ entry, productSlug: entry.slug }}>
   let stockData = []; // se rellena al cargar la página
 
+  // Normaliza texto para comparar sin que importen mayúsculas/minúsculas ni espacios extra
+  function normalize(text) {
+    return (text || '').trim().toLowerCase();
+  }
+
   // --- 1. Cargar el stock real de este producto ---
   async function loadStock() {
     try {
@@ -249,10 +254,26 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     }
   }
 
-  // Busca la cantidad disponible para una combinación concreta
+  // Cantidad exacta para una combinación concreta talla+color
   function getQuantity(size, color) {
-    const match = stockData.find(row => row.size === size && row.color === color);
+    const match = stockData.find(row =>
+      normalize(row.size) === normalize(size) && normalize(row.color) === normalize(color)
+    );
     return match ? match.quantity : 0;
+  }
+
+  // Suma de stock para una talla, sin importar el color (se usa cuando aún no se ha elegido color)
+  function getTotalForSize(size) {
+    return stockData
+      .filter(row => normalize(row.size) === normalize(size))
+      .reduce((sum, row) => sum + row.quantity, 0);
+  }
+
+  // Suma de stock para un color, sin importar la talla (se usa cuando aún no se ha elegido talla)
+  function getTotalForColor(color) {
+    return stockData
+      .filter(row => normalize(row.color) === normalize(color))
+      .reduce((sum, row) => sum + row.quantity, 0);
   }
 
   // --- 2. Pintar qué tallas/colores están disponibles según lo ya seleccionado ---
@@ -265,17 +286,20 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
     const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
 
-    // Si el producto tiene tallas, comprobamos cada una contra el color ya elegido (o "Único")
+    // Tallas: si ya hay un color elegido, miramos esa combinación exacta.
+    // Si no hay color elegido todavía, miramos si esa talla tiene stock en ALGÚN color.
     sizeInputs.forEach(input => {
-      const colorToCheck = selectedColor || 'Único';
-      const qty = getQuantity(input.value, colorToCheck);
+      const qty = selectedColor
+        ? getQuantity(input.value, selectedColor)
+        : getTotalForSize(input.value);
       setOptionDisabled(input, qty <= 0);
     });
 
-    // Si el producto tiene colores, comprobamos cada uno contra la talla ya elegida (o "Única")
+    // Colores: mismo criterio pero al revés.
     colorInputs.forEach(input => {
-      const sizeToCheck = selectedSize || 'Única';
-      const qty = getQuantity(sizeToCheck, input.value);
+      const qty = selectedSize
+        ? getQuantity(selectedSize, input.value)
+        : getTotalForColor(input.value);
       setOptionDisabled(input, qty <= 0);
     });
 
@@ -305,18 +329,20 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     const hasSizes = document.querySelector('.product-option[data-type="talla"]');
     const hasColors = document.querySelector('.product-option[data-type="color"]');
 
-    const selectedSize = document.querySelector('input[name="size"]:checked')?.value || (hasSizes ? null : 'Única');
-    const selectedColor = document.querySelector('input[name="color"]:checked')?.value || (hasColors ? null : 'Único');
+    const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
+    const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
 
     // Si falta elegir talla o color obligatorios, dejamos el botón activo
     // (el aviso de "selecciona talla/color" ya lo gestiona el click de más abajo)
-    if (!selectedSize || !selectedColor) {
+    if ((hasSizes && !selectedSize) || (hasColors && !selectedColor)) {
       btn.disabled = false;
       btn.classList.remove('opacity-50', 'cursor-not-allowed');
       return;
     }
 
-    const qty = getQuantity(selectedSize, selectedColor);
+    const finalSize = selectedSize || 'Única';
+    const finalColor = selectedColor || 'Único';
+    const qty = getQuantity(finalSize, finalColor);
     btn.disabled = qty <= 0;
     btn.classList.toggle('opacity-50', qty <= 0);
     btn.classList.toggle('cursor-not-allowed', qty <= 0);
@@ -328,7 +354,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
   });
 
   loadStock();
-setInterval(loadStock, 15000); // vuelve a consultar el stock cada 15 segundos
+  setInterval(loadStock, 15000); // vuelve a consultar el stock cada 15 segundos
 
   // --- 3. Lógica original del carrito (sin cambios) ---
   const btn = document.getElementById('add-to-cart-btn');
