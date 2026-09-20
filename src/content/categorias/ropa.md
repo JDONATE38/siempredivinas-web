@@ -2,11 +2,13 @@
 title: ROPA
 pageTitle: "Ropa diferente para mujer: Originalidad, elegancia y diseño."
 description: >-
-  Descubre las últimas novedades de Siempre Divinas. ✨ Encuentra los nuevos
-  modelos que acabamos de incorporar: ropa, calzado, bolsos y complementos con
-  las tendencias más actuales.
+  ROPA DE MUJER
 
-  Renovamos nuestra colección para que siempre encuentres algo nuevo que te enamore. 💕 ¡Sé de las primeras en descubrirlo!
+
+  Descubre nuestra colección de ropa de mujer con prendas actuales, versátiles y llenas de estilo. ✨ Encuentra vestidos, blusas, camisetas, jerséis, faldas, pantalones y mucho más para crear looks que encajen contigo.
+
+
+  Seleccionamos tendencias de moda para que puedas renovar tu armario y encontrar prendas perfectas tanto para el día a día como para ocasiones especiales. 💕
 order: 3
 seoTitle: Ropa diferente y original de mujer en España | Elegancia Moderna
 seoDescription: Encuentra ropa de mujer original y elegante que no verás en
