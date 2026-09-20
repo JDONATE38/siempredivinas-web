@@ -3,6 +3,8 @@ title: Jersey cuello bardot
 price: 15
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000360714.webp
 gallery1: /img/1000360724.webp
