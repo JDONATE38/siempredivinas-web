@@ -1,7 +1,25 @@
 ---
 title: BOLSOS
-description: No va gpt
+description: >-
+  Descubre nuestra colección de bolsos para mujer, pensada para completar tus
+  looks con estilo, personalidad y ese toque especial que marca la diferencia.
+  👜✨
+
+  Seleccionamos modelos actuales y versátiles para que puedas encontrar el bolso perfecto para cada ocasión, combinando moda, comodidad y tendencia.
+
+  Bolsos de mujer para todos tus looks
+
+  Seleccionamos modelos actuales y versátiles para que puedas encontrar el bolso perfecto para cada ocasión, combinando moda, comodidad y tendencia. 
 order: 1
 seoTitle: BOLSOS
-seoDescription: No va gpt
+seoDescription: >-
+  Descubre nuestra colección de bolsos para mujer, pensada para completar tus
+  looks con estilo, personalidad y ese toque especial que marca la diferencia.
+  👜✨
+
+  Seleccionamos modelos actuales y versátiles para que puedas encontrar el bolso perfecto para cada ocasión, combinando moda, comodidad y tendencia.
+
+  Bolsos de mujer para todos tus looks
+
+  Seleccionamos modelos actuales y versátiles para que puedas encontrar el bolso perfecto para cada ocasión, combinando moda, comodidad y tendencia.
 ---
