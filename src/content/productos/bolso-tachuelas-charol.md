@@ -1,0 +1,17 @@
+---
+title: Bolso tachuelas charol
+price: 17
+category:
+  - ROPA
+stockStatus: En Stock
+image: /img/1000361179.webp
+gallery1: /img/1000361174.webp
+gallery2: /img/1000361175.webp
+gallery3: /img/1000361176.webp
+sizes: "Talla única "
+colors: Negro, blanco, rosa, beige, dorado
+description: "No va gpt "
+seoTitle: Bolso tachuelas charol
+seoDescription: No va gpt
+draft: false
+---
