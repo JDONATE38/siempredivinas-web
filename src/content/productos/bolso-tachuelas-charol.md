@@ -2,7 +2,7 @@
 title: Bolso tachuelas charol
 price: 17
 category:
-  - ROPA
+  - BOLSOS
 stockStatus: En Stock
 image: /img/1000361179.webp
 gallery1: /img/1000361174.webp
