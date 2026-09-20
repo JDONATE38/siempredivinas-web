@@ -3,6 +3,8 @@ title: "Jersey oversize cuello vuelto "
 price: 12
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000360899.webp
 gallery1: /img/1000360907.webp
