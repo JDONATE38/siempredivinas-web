@@ -3,6 +3,8 @@ title: "Jersey canalé cuello vuelto "
 price: 12
 category:
   - ROPA
+subcategory:
+  - JERSEYS
 stockStatus: En Stock
 image: /img/1000360868.webp
 gallery1: /img/1000360879.webp
