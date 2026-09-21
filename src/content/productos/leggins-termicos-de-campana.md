@@ -11,7 +11,7 @@ gallery1: /img/1000355117.webp
 gallery2: /img/1000355116.webp
 gallery3: /img/1000355115.webp
 sizes: S/M, M/L, XL/XXL
-colors: NEGRO, MARRON, GRIS
+colors: Negro, Marron, Gris
 description: |-
   ✨ Leggings térmicos calentitos ✨
   Imprescindibles para los días de frío ❄️
