@@ -7,7 +7,7 @@
 
 export async function onRequestGet(context) {
   const { env, params } = context;
-  const slug = params.slug;
+  const slug = (params.slug || "").trim().toLowerCase();
 
   if (!slug) {
     return new Response(JSON.stringify({ error: "Falta el slug del producto" }), {
@@ -16,14 +16,15 @@ export async function onRequestGet(context) {
     });
   }
 
+  // Comparamos ignorando mayúsculas/minúsculas y espacios sobrantes,
+  // así un slug mal escrito con distinta capitalización sigue funcionando.
   const { results } = await env.DB.prepare(
-    "SELECT size, color, quantity FROM stock WHERE product_slug = ?"
+    "SELECT size, color, quantity FROM stock WHERE LOWER(TRIM(product_slug)) = ?"
   ).bind(slug).all();
 
   return new Response(JSON.stringify(results), {
     headers: {
       "content-type": "application/json",
-      // Evita que el navegador guarde una copia vieja del stock en caché
       "cache-control": "no-store"
     }
   });
