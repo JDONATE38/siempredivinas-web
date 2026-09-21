@@ -9,7 +9,7 @@ image: /img/1000355100.webp
 gallery1: /img/1000355099.webp
 gallery2: /img/1000355098.webp
 sizes: S/M, M/L, XL/XXL
-colors: Negro, Azul claro, Gris
+colors: Negro, Azul Claro, Gris
 description: >-
   Descubre el conjunto deportivo para mujer perfecto que combina estilo,
   comodidad y versatilidad. Este chándal incluye chaqueta con cremallera y
