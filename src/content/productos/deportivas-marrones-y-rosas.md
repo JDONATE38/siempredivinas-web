@@ -9,6 +9,7 @@ gallery1: /img/1000352406.webp
 gallery2: /img/1000352418.webp
 gallery3: /img/1000352472.webp
 sizes: 36, 37, 38, 39
+colors: Marron y Rosa
 description: |
   👟 Deportivas urbanas en tono marrón 👟
   Comodidad y estilo para tu día a día ✨
