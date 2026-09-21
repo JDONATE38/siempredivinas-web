@@ -8,7 +8,7 @@ image: /img/1000361115.webp
 gallery1: /img/1000361127.webp
 gallery2: /img/1000361129.webp
 gallery3: /img/1000361128.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: "Chica Gafas, Chica Flores, Chica Café, Chica Torreifel "
 description: Chat gtp
 seoTitle: "Camiseta oversize chicas "
