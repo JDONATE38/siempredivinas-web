@@ -8,8 +8,8 @@ subcategory:
 stockStatus: En Stock
 image: /img/1000356533.webp
 gallery1: /img/1000356530.webp
-sizes: "Talla única "
-colors: Negro, gris, marrón, granate, verde
+sizes: "Talla Única "
+colors: Negro, Gris, Marrón, Granate, Verde
 description: >-
   ✨ ¡Elegancia y comodidad en una sola prenda! ✨
 
