@@ -8,7 +8,7 @@ subcategory:
 stockStatus: En Stock
 image: /img/1000358817.webp
 gallery1: /img/1000358823.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: Negro, Chocolate, Beige
 description: |
   ✨ NUEVOS JERSEYS EN TIENDA ✨
