@@ -8,7 +8,7 @@ subcategory:
 stockStatus: En Stock
 image: /img/1000360714.webp
 gallery1: /img/1000360724.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: Negro, Gris, Beige, Marron
 description: >-
   ✨ Jersey Elegante con Cuello Bardot ✨
