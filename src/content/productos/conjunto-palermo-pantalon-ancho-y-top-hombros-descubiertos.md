@@ -8,8 +8,8 @@ image: /img/1000214251.webp
 gallery1: /img/1000214249.webp
 gallery2: /img/1000214248.webp
 gallery3: /img/1000214247.webp
-sizes: Unica
-colors: Negro, azul eléctrico, buganvilla, verde oliva, verde oscuro
+sizes: Talla Única
+colors: Negro, Azul Eléctrico, Buganvilla, Verde Oliva, Verde Oscuro
 description: >-
   Descubre el conjunto de mujer más cómodo y favorecedor de la temporada.
   Diseñado con pantalón ancho fluido y top palabra de honor con hombros
