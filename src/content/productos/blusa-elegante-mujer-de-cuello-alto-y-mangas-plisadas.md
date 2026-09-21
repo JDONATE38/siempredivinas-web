@@ -6,7 +6,7 @@ category:
 stockStatus: En Stock
 image: /img/1000355771.webp
 gallery1: /img/1000355770.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: Rosa, Negro, Blanco
 description: >-
   Descubre nuestra preciosa blusa elegante para mujer, una prenda sofisticada y
