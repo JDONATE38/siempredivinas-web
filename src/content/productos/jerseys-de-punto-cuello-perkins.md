@@ -8,8 +8,8 @@ subcategory:
 stockStatus: En Stock
 image: /img/1000356585.webp
 gallery1: /img/1000356589.webp
-sizes: "Talla única "
-colors: Negro, beige, fucsia, verde, mostaza
+sizes: "Talla Única "
+colors: Negro, Beige, Fucsia, Verde, Mostaza
 description: >-
   ✨ Jerseys de punto suave – básicos que enamoran ✨
 
