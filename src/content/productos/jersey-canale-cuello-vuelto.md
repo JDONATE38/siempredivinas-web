@@ -10,8 +10,8 @@ image: /img/1000360868.webp
 gallery1: /img/1000360879.webp
 gallery2: /img/1000360878.webp
 gallery3: /img/1000360877.webp
-sizes: "Talla única "
-colors: Rosa, gris, blanco, beige
+sizes: "Talla Única "
+colors: Rosa, Gris, Blanco, Beige
 description: >-
   Descubre este jersey de mujer de cuello alto y punto canalé, un básico
   imprescindible para crear looks cómodos, favorecedores y calentitos durante
