@@ -3,33 +3,33 @@
 // Panel de stock para Siempre Divinas.
 // Accesible en: https://siempredivinas.com/admin/stock
 // Protegido con usuario/contraseña (login básico del navegador).
-
+ 
 function checkAuth(context) {
   const { request, env } = context;
   const authHeader = request.headers.get("Authorization");
-
+ 
   const unauthorizedResponse = new Response("Autenticación requerida", {
     status: 401,
     headers: { "WWW-Authenticate": 'Basic realm="Panel de Stock"' }
   });
-
+ 
   if (!authHeader || !authHeader.startsWith("Basic ")) {
     return unauthorizedResponse;
   }
-
+ 
   const base64Credentials = authHeader.split(" ")[1];
   const credentials = atob(base64Credentials);
   const separatorIndex = credentials.indexOf(":");
   const user = credentials.substring(0, separatorIndex);
   const pass = credentials.substring(separatorIndex + 1);
-
+ 
   if (user !== env.ADMIN_USER || pass !== env.ADMIN_PASSWORD) {
     return unauthorizedResponse;
   }
-
+ 
   return null; // Autenticación correcta
 }
-
+ 
 function renderPage(rows) {
   const rowsHtml = rows.map(r => `
     <tr>
@@ -53,7 +53,7 @@ function renderPage(rows) {
       </td>
     </tr>
   `).join("");
-
+ 
   return `<!DOCTYPE html>
   <html lang="es">
   <head>
@@ -86,7 +86,7 @@ function renderPage(rows) {
         ${rowsHtml || '<tr><td colspan="5">Todavía no hay stock cargado.</td></tr>'}
       </tbody>
     </table>
-
+ 
     <h2>Añadir producto / combinación nueva</h2>
     <form class="add-form" method="POST">
       <input type="hidden" name="action" value="insert">
@@ -110,47 +110,50 @@ function renderPage(rows) {
   </body>
   </html>`;
 }
-
+ 
 export async function onRequestGet(context) {
   const authResponse = checkAuth(context);
   if (authResponse) return authResponse;
-
+ 
   const { env } = context;
   const { results } = await env.DB.prepare(
     "SELECT * FROM stock ORDER BY product_title, size, color"
   ).all();
-
+ 
   return new Response(renderPage(results), {
-    headers: { "content-type": "text/html; charset=UTF-8" }
+    headers: {
+      "content-type": "text/html; charset=UTF-8",
+      "cache-control": "no-store"
+    }
   });
 }
-
+ 
 export async function onRequestPost(context) {
   const authResponse = checkAuth(context);
   if (authResponse) return authResponse;
-
+ 
   const { env, request } = context;
   const formData = await request.formData();
   const action = formData.get("action");
-
+ 
   if (action === "delete") {
     const id = formData.get("id");
     await env.DB.prepare("DELETE FROM stock WHERE id = ?").bind(id).run();
-
+ 
   } else if (action === "update") {
     const id = formData.get("id");
     const quantity = parseInt(formData.get("quantity"), 10) || 0;
     await env.DB.prepare(
       "UPDATE stock SET quantity = ?, updated_at = datetime('now') WHERE id = ?"
     ).bind(quantity, id).run();
-
+ 
   } else if (action === "insert") {
     const product_slug = (formData.get("product_slug") || "").trim();
     const product_title = (formData.get("product_title") || "").trim();
     const size = (formData.get("size") || "Única").trim();
     const color = (formData.get("color") || "Único").trim();
     const quantity = parseInt(formData.get("quantity"), 10) || 0;
-
+ 
     if (product_slug && product_title) {
       await env.DB.prepare(`
         INSERT INTO stock (product_slug, product_title, size, color, quantity, updated_at)
@@ -160,6 +163,6 @@ export async function onRequestPost(context) {
       `).bind(product_slug, product_title, size, color, quantity, quantity, product_title).run();
     }
   }
-
+ 
   return Response.redirect(new URL("/admin/stock", request.url).toString(), 302);
 }
