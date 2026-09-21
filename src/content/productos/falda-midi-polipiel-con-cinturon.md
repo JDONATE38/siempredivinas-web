@@ -6,8 +6,8 @@ category:
 stockStatus: En Stock
 image: /img/1000358802.webp
 gallery1: /img/1000358813.webp
-sizes: "Talla única "
-colors: Negro, chocolate, camel
+sizes: "Talla Única "
+colors: Negro, Chocolate, Camel
 description: >-
   Descubre esta elegante falda midi de polipiel para mujer, una prenda versátil
   y sofisticada que no puede faltar en tus looks de otoño e invierno.
