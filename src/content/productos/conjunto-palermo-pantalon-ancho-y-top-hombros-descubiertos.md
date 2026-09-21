@@ -8,7 +8,7 @@ image: /img/1000214251.webp
 gallery1: /img/1000214249.webp
 gallery2: /img/1000214248.webp
 gallery3: /img/1000214247.webp
-sizes: Talla Única
+sizes: Única
 colors: Negro, Azul Eléctrico, Buganvilla, Verde Oliva, Verde Oscuro
 description: >-
   Descubre el conjunto de mujer más cómodo y favorecedor de la temporada.
