@@ -10,7 +10,7 @@ image: /img/1000352463.webp
 gallery1: /img/1000352476.webp
 gallery2: /img/1000352469.webp
 sizes: 38, 41
-colors: Botas de pelo estilo ugg
+colors: Botas de Pelo Estilo Ugg
 description: |-
   Botas de pelo por dentro y por fuera
   Estilo de la firma Ugg.
