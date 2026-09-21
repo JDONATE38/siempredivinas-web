@@ -8,7 +8,7 @@ subcategory:
 stockStatus: En Stock
 image: /img/1000356650.webp
 gallery1: /img/1000356651.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: Negro-Blanco, Beige-Blanco
 description: >-
   Suéter rombos cuello alto
