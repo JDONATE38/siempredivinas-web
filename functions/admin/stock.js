@@ -3,37 +3,38 @@
 // Panel de stock para Siempre Divinas.
 // Accesible en: https://siempredivinas.com/admin/stock
 // Protegido con usuario/contraseña (login básico del navegador).
- 
+
 function checkAuth(context) {
   const { request, env } = context;
   const authHeader = request.headers.get("Authorization");
- 
+
   const unauthorizedResponse = new Response("Autenticación requerida", {
     status: 401,
     headers: { "WWW-Authenticate": 'Basic realm="Panel de Stock"' }
   });
- 
+
   if (!authHeader || !authHeader.startsWith("Basic ")) {
     return unauthorizedResponse;
   }
- 
+
   const base64Credentials = authHeader.split(" ")[1];
   const credentials = atob(base64Credentials);
   const separatorIndex = credentials.indexOf(":");
   const user = credentials.substring(0, separatorIndex);
   const pass = credentials.substring(separatorIndex + 1);
- 
+
   if (user !== env.ADMIN_USER || pass !== env.ADMIN_PASSWORD) {
     return unauthorizedResponse;
   }
- 
+
   return null; // Autenticación correcta
 }
- 
+
 function renderPage(rows) {
   const rowsHtml = rows.map(r => `
     <tr>
       <td>${r.product_title}</td>
+      <td style="font-family: monospace; font-size: 12px; color: #888;">${r.product_slug}</td>
       <td>${r.size}</td>
       <td>${r.color}</td>
       <td>
@@ -53,7 +54,7 @@ function renderPage(rows) {
       </td>
     </tr>
   `).join("");
- 
+
   return `<!DOCTYPE html>
   <html lang="es">
   <head>
@@ -61,7 +62,7 @@ function renderPage(rows) {
     <meta name="robots" content="noindex, nofollow">
     <title>Panel de Stock — Siempre Divinas</title>
     <style>
-      body { font-family: sans-serif; max-width: 950px; margin: 40px auto; padding: 0 20px; color: #333; }
+      body { font-family: sans-serif; max-width: 1050px; margin: 40px auto; padding: 0 20px; color: #333; }
       table { width: 100%; border-collapse: collapse; margin-top: 20px; }
       th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
       th { background: #f5f5f5; }
@@ -73,6 +74,7 @@ function renderPage(rows) {
       button:hover { background: #db2777; }
       .delete-btn { background: #dc2626; }
       .delete-btn:hover { background: #b91c1c; }
+      .hint { color: #888; font-size: 13px; margin-top: -6px; margin-bottom: 12px; }
     </style>
   </head>
   <body>
@@ -80,19 +82,20 @@ function renderPage(rows) {
     <p>Aquí puedes ver, corregir o borrar el stock actual de cada combinación de producto, talla y color.</p>
     <table>
       <thead>
-        <tr><th>Producto</th><th>Talla</th><th>Color</th><th>Cantidad</th><th>Borrar</th></tr>
+        <tr><th>Producto</th><th>Slug (URL)</th><th>Talla</th><th>Color</th><th>Cantidad</th><th>Borrar</th></tr>
       </thead>
       <tbody>
-        ${rowsHtml || '<tr><td colspan="5">Todavía no hay stock cargado.</td></tr>'}
+        ${rowsHtml || '<tr><td colspan="6">Todavía no hay stock cargado.</td></tr>'}
       </tbody>
     </table>
- 
+
     <h2>Añadir producto / combinación nueva</h2>
     <form class="add-form" method="POST">
       <input type="hidden" name="action" value="insert">
-      <label>Slug del producto (el que aparece en la URL, ej: camiseta-cuello-cascada)
+      <label>Slug del producto (cópialo tal cual de la URL, después de /productos/)
         <input type="text" name="product_slug" required placeholder="camiseta-cuello-cascada">
       </label>
+      <p class="hint">Tip: entra en la ficha del producto, copia lo que hay en la barra de direcciones después de "/productos/", y pégalo aquí — así evitas errores de escritura.</p>
       <label>Nombre del producto
         <input type="text" name="product_title" required placeholder="Camiseta cuello cascada">
       </label>
@@ -110,16 +113,16 @@ function renderPage(rows) {
   </body>
   </html>`;
 }
- 
+
 export async function onRequestGet(context) {
   const authResponse = checkAuth(context);
   if (authResponse) return authResponse;
- 
+
   const { env } = context;
   const { results } = await env.DB.prepare(
     "SELECT * FROM stock ORDER BY product_title, size, color"
   ).all();
- 
+
   return new Response(renderPage(results), {
     headers: {
       "content-type": "text/html; charset=UTF-8",
@@ -127,33 +130,35 @@ export async function onRequestGet(context) {
     }
   });
 }
- 
+
 export async function onRequestPost(context) {
   const authResponse = checkAuth(context);
   if (authResponse) return authResponse;
- 
+
   const { env, request } = context;
   const formData = await request.formData();
   const action = formData.get("action");
- 
+
   if (action === "delete") {
     const id = formData.get("id");
     await env.DB.prepare("DELETE FROM stock WHERE id = ?").bind(id).run();
- 
+
   } else if (action === "update") {
     const id = formData.get("id");
     const quantity = parseInt(formData.get("quantity"), 10) || 0;
     await env.DB.prepare(
       "UPDATE stock SET quantity = ?, updated_at = datetime('now') WHERE id = ?"
     ).bind(quantity, id).run();
- 
+
   } else if (action === "insert") {
-    const product_slug = (formData.get("product_slug") || "").trim();
+    // Limpiamos el slug: sin espacios sobrantes y siempre en minúsculas,
+    // para que siempre coincida con lo que consulta la ficha de producto.
+    const product_slug = (formData.get("product_slug") || "").trim().toLowerCase();
     const product_title = (formData.get("product_title") || "").trim();
     const size = (formData.get("size") || "Única").trim();
     const color = (formData.get("color") || "Único").trim();
     const quantity = parseInt(formData.get("quantity"), 10) || 0;
- 
+
     if (product_slug && product_title) {
       await env.DB.prepare(`
         INSERT INTO stock (product_slug, product_title, size, color, quantity, updated_at)
@@ -163,6 +168,6 @@ export async function onRequestPost(context) {
       `).bind(product_slug, product_title, size, color, quantity, quantity, product_title).run();
     }
   }
- 
+
   return Response.redirect(new URL("/admin/stock", request.url).toString(), 302);
 }
