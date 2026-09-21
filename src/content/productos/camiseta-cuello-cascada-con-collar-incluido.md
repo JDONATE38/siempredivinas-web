@@ -6,7 +6,7 @@ category:
 stockStatus: En Stock
 image: /img/1000355762.webp
 gallery1: /img/1000355763.webp
-sizes: "Talla Única "
+sizes: "Única "
 colors: Azul Marino, Rosa, Azul Bebe, Blanca
 description: >-
   Descubre esta preciosa camiseta para mujer de manga larga con elegante cuello
