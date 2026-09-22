@@ -14,20 +14,13 @@ export async function getStaticPaths() {
 const { category } = Astro.props;
 
 // 1. OBTENER SUBCATEGORÍAS ASOCIADAS
-// Buscamos subcategorías que tengan a ESTA categoría como padre (o uno de sus padres)
 const allSubcategories = await getCollection('subcategorias');
 const subcategoriesForThisCategory = allSubcategories.filter(subcat => {
     const parents = subcat.data.parentCategory;
-    
-    // Si no tiene padre, no sale
     if (!parents) return false;
-
-    // Si es una lista (formato nuevo), miramos si incluye el título de esta categoría
     if (Array.isArray(parents)) {
         return parents.includes(category.data.title);
     }
-    
-    // Si es texto (formato antiguo), comparamos directo
     return parents === category.data.title || parents === category.slug;
 });
 
@@ -35,19 +28,11 @@ const subcategoriesForThisCategory = allSubcategories.filter(subcat => {
 const allProducts = await getCollection('productos');
 const productsInCategory = allProducts.filter(product => {
     if (product.data.draft) return false;
-    
-    // Obtenemos las categorías del producto
     const productCats = product.data.category; 
-    
-    // Si el producto no tiene categorías asignadas, no sale aquí
     if (!productCats) return false;
-
-    // Si es una lista, miramos si incluye esta categoría
     if (Array.isArray(productCats)) {
         return productCats.includes(category.data.title);
     }
-    
-    // Si es texto, comparamos directo
     return productCats === category.data.title || productCats === category.slug;
 });
 
@@ -101,9 +86,12 @@ const seoDescription = category.data.seoDescription || pageDescription;
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {productsInCategory.map((product) => (
-                    <a href={`/productos/${product.slug}`} class="group block">
+                    <a href={`/productos/${product.slug}`} class="group block" data-product-slug={product.slug}>
                         <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 aspect-[3/4] bg-gray-100">
-                            <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+                            <div class="agotado-badge hidden absolute top-2 right-2 z-10 bg-red-600 text-white text-xs px-3 py-1 font-bold uppercase tracking-wide rounded shadow">
+                                Agotado
+                            </div>
+                            <img src={product.data.image} alt={product.data.title} class="product-image w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
                             <div class="absolute bottom-0 left-0 w-full bg-pink-brand/90 p-3 translate-y-full group-hover:translate-y-0 transition duration-300 text-center">
                                 <span class="text-white font-bold text-sm uppercase italic">Ver detalles divinos &rarr;</span>
                             </div>
@@ -117,4 +105,31 @@ const seoDescription = category.data.seoDescription || pageDescription;
             </div>
         </div>
     </main>
+
+    <script>
+        // Pregunta al servidor qué productos están a 0 de stock real,
+        // y pinta el sello "Agotado" sobre sus tarjetas.
+        async function marcarProductosAgotados() {
+            try {
+                const res = await fetch('/api/stock-totals', { cache: 'no-store' });
+                const agotadosSlugs = await res.json();
+                const agotadosSet = new Set(agotadosSlugs);
+
+                document.querySelectorAll('[data-product-slug]').forEach((card) => {
+                    const slug = (card.dataset.productSlug || '').trim().toLowerCase();
+                    if (agotadosSet.has(slug)) {
+                        const badge = card.querySelector('.agotado-badge');
+                        if (badge) badge.classList.remove('hidden');
+
+                        const img = card.querySelector('.product-image');
+                        if (img) img.classList.add('opacity-60', 'grayscale');
+                    }
+                });
+            } catch (err) {
+                console.error('No se pudo comprobar el stock de los productos:', err);
+            }
+        }
+
+        marcarProductosAgotados();
+    </script>
 </Layout>
