@@ -232,8 +232,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     )}
   </main>
 
-  {/* SUSTITUIR el <script define:vars={{ entry }}> completo (el del carrito) por este: */}
-
 <script define:vars={{ entry, productSlug: entry.slug }}>
   let stockData = []; // se rellena al cargar la página
 
@@ -245,12 +243,14 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
   // --- 1. Cargar el stock real de este producto ---
   async function loadStock() {
     try {
-      const res = await fetch(`/api/stock/${productSlug}`);
+      const res = await fetch(`/api/stock/${productSlug}`, { cache: 'no-store' });
       stockData = await res.json();
       updateAvailability();
+      return stockData;
     } catch (err) {
       console.error('No se pudo cargar el stock:', err);
       // Si falla, no bloqueamos nada (mejor pecar de permisivo que romper la venta)
+      return stockData;
     }
   }
 
@@ -354,13 +354,13 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
   });
 
   loadStock();
-  setInterval(loadStock, 15000); // vuelve a consultar el stock cada 15 segundos
+  setInterval(loadStock, 15000); // vuelve a consultar el stock cada 15 segundos (por si la deja abierta un rato)
 
-  // --- 3. Lógica original del carrito (sin cambios) ---
+  // --- 3. Lógica del carrito, con comprobación de stock EN EL MOMENTO del click ---
   const btn = document.getElementById('add-to-cart-btn');
 
   if (btn) {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
           const sizeInput = document.querySelector('input[name="size"]:checked');
           const colorInput = document.querySelector('input[name="color"]:checked');
 
@@ -378,6 +378,25 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
           const sizeValue = sizeInput ? sizeInput.value : 'Única';
           const colorValue = colorInput ? colorInput.value : 'Único';
+
+          // --- COMPROBACIÓN EN TIEMPO REAL, justo antes de añadir ---
+          // No confiamos en el último dato cargado (puede tener hasta 15 seg de antigüedad):
+          // volvemos a preguntar a la base de datos en este mismo instante.
+          btn.disabled = true;
+          const originalText = btn.innerHTML;
+          btn.innerHTML = 'Comprobando stock...';
+
+          await loadStock(); // refresca stockData con el dato más reciente posible
+
+          const qtyNow = getQuantity(sizeValue, colorValue);
+
+          btn.innerHTML = originalText;
+
+          if (qtyNow <= 0) {
+              alert('😔 Lo sentimos, esta combinación se acaba de agotar. Prueba con otra talla o color.');
+              updateAvailability(); // nubla la opción al momento, sin esperar al intervalo
+              return;
+          }
 
           const cartItem = {
               id: entry.slug + '-' + sizeValue + '-' + colorValue,
@@ -402,6 +421,8 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
           window.dispatchEvent(new Event('cart-updated'));
           window.dispatchEvent(new Event('toggle-cart'));
+
+          btn.disabled = false;
       });
   }
 </script>
