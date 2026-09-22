@@ -30,26 +30,20 @@ const browserDescription = seoDescription ? seoDescription : description;
 // --- MEZCLA DE TALLAS Y COLORES (CORREGIDO) ---
 function processOptions(input) {
     if (!input) return [];
-    // Si viene como un texto ("S, M, L"), lo partimos por las comas
     if (typeof input === 'string') {
         return input.split(',').map(item => item.trim()).filter(item => item !== '');
     }
-    // Si ya es un array (lista antigua), lo devolvemos tal cual
     if (Array.isArray(input)) {
         return input;
     }
     return [];
 }
 
-// 1. Procesamos los campos principales (que ahora vienen del CMS como texto separado por comas)
 const mainSizesList = processOptions(sizes);
 const mainColorsList = processOptions(colors);
-
-// 2. Procesamos los campos "custom" antiguos por si algún producto viejo los sigue usando
 const customSizesList = processOptions(customSizes);
 const customColorsList = processOptions(customColors);
 
-// 3. Juntamos todo en una sola lista (y usamos Set para quitar duplicados, por si acaso)
 const finalSizes = [...new Set([...mainSizesList, ...customSizesList])];
 const finalColors = [...new Set([...mainColorsList, ...customColorsList])];
 
@@ -139,6 +133,11 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                     🔥 Últimas Unidades
                 </div>
             )}
+            {!isAgotado && (
+                <div class="auto-agotado-ribbon hidden absolute top-4 left-4 z-10 bg-red-600 text-white px-4 py-2 font-bold uppercase tracking-wider shadow-lg rounded">
+                    🚫 Agotado
+                </div>
+            )}
 
             <img src={image} alt={title} class={`w-full rounded-lg shadow-lg object-cover aspect-[3/4] ${isAgotado ? 'opacity-75 grayscale' : ''}`} id="mainImage"/>
             
@@ -158,6 +157,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
                 <p class="text-3xl text-gold-600 font-bold">{price}€</p>
                 {isAgotado && <span class="text-red-600 font-bold text-sm uppercase border border-red-200 bg-red-50 px-2 py-1 rounded">Sin Stock</span>}
                 {isLastUnits && <span class="text-orange-500 font-bold text-sm uppercase border border-orange-200 bg-orange-50 px-2 py-1 rounded">¡Corre que vuelan!</span>}
+                {!isAgotado && <span class="auto-sin-stock-badge hidden text-red-600 font-bold text-sm uppercase border border-red-200 bg-red-50 px-2 py-1 rounded">Sin Stock</span>}
             </div>
 
             <div class="prose text-gray-600 mb-8"><p>{description}</p></div>
@@ -232,7 +232,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     )}
   </main>
 
-<script define:vars={{ entry, productSlug: entry.slug }}>
+<script define:vars={{ entry, productSlug: entry.slug, initialAgotado: isAgotado }}>
   let stockData = []; // se rellena al cargar la página
 
   // Normaliza texto para comparar sin que importen mayúsculas/minúsculas ni espacios extra
@@ -246,11 +246,41 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
       const res = await fetch(`/api/stock/${productSlug}`, { cache: 'no-store' });
       stockData = await res.json();
       updateAvailability();
+      checkTotalStock();
       return stockData;
     } catch (err) {
       console.error('No se pudo cargar el stock:', err);
       // Si falla, no bloqueamos nada (mejor pecar de permisivo que romper la venta)
       return stockData;
+    }
+  }
+
+  // --- Comprobación de stock TOTAL del producto (todas las tallas/colores) ---
+  // Si el CMS no lo ha marcado ya como "Agotado" a mano, pero el stock real
+  // de TODAS las combinaciones ha llegado a 0, lo marcamos automáticamente.
+  function checkTotalStock() {
+    if (initialAgotado) return; // el CMS ya lo marca a mano, no hace falta nada más
+    if (stockData.length === 0) return; // todavía no hay datos cargados, o el producto no tiene filas de stock
+
+    const totalStock = stockData.reduce((sum, row) => sum + (row.quantity || 0), 0);
+    if (totalStock > 0) return; // queda stock en algún sitio, no tocamos nada
+
+    // Mostrar el sello "Agotado" sobre la imagen
+    document.querySelectorAll('.auto-agotado-ribbon').forEach(el => el.classList.remove('hidden'));
+    // Mostrar el badge "Sin Stock" junto al precio
+    document.querySelectorAll('.auto-sin-stock-badge').forEach(el => el.classList.remove('hidden'));
+
+    // Poner la imagen principal en gris
+    const mainImg = document.getElementById('mainImage');
+    if (mainImg) mainImg.classList.add('opacity-75', 'grayscale');
+
+    // Desactivar el botón de compra
+    const btn = document.getElementById('add-to-cart-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.remove('bg-black', 'hover:bg-gray-800', 'hover:scale-[1.02]');
+      btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+      btn.innerHTML = '<span class="text-2xl">🚫</span> PRODUCTO AGOTADO';
     }
   }
 
@@ -286,8 +316,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
     const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
 
-    // Tallas: si ya hay un color elegido, miramos esa combinación exacta.
-    // Si no hay color elegido todavía, miramos si esa talla tiene stock en ALGÚN color.
     sizeInputs.forEach(input => {
       const qty = selectedColor
         ? getQuantity(input.value, selectedColor)
@@ -295,7 +323,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
       setOptionDisabled(input, qty <= 0);
     });
 
-    // Colores: mismo criterio pero al revés.
     colorInputs.forEach(input => {
       const qty = selectedSize
         ? getQuantity(selectedSize, input.value)
@@ -315,7 +342,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
       label.classList.toggle('cursor-not-allowed', disabled);
       label.classList.toggle('pointer-events-none', disabled);
     }
-    // Si estaba seleccionada y ya no hay stock, la deseleccionamos
     if (disabled && input.checked) {
       input.checked = false;
     }
@@ -332,8 +358,6 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
     const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
     const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
 
-    // Si falta elegir talla o color obligatorios, dejamos el botón activo
-    // (el aviso de "selecciona talla/color" ya lo gestiona el click de más abajo)
     if ((hasSizes && !selectedSize) || (hasColors && !selectedColor)) {
       btn.disabled = false;
       btn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -379,14 +403,11 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
           const sizeValue = sizeInput ? sizeInput.value : 'Única';
           const colorValue = colorInput ? colorInput.value : 'Único';
 
-          // --- COMPROBACIÓN EN TIEMPO REAL, justo antes de añadir ---
-          // No confiamos en el último dato cargado (puede tener hasta 15 seg de antigüedad):
-          // volvemos a preguntar a la base de datos en este mismo instante.
           btn.disabled = true;
           const originalText = btn.innerHTML;
           btn.innerHTML = 'Comprobando stock...';
 
-          await loadStock(); // refresca stockData con el dato más reciente posible
+          await loadStock();
 
           const qtyNow = getQuantity(sizeValue, colorValue);
 
@@ -394,7 +415,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
           if (qtyNow <= 0) {
               alert('😔 Lo sentimos, esta combinación se acaba de agotar. Prueba con otra talla o color.');
-              updateAvailability(); // nubla la opción al momento, sin esperar al intervalo
+              updateAvailability();
               return;
           }
 
