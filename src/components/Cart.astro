@@ -150,45 +150,6 @@
     });
   }
 
-  // 4. CHECKOUT INTELIGENTE
-  checkoutBtn.addEventListener('click', () => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    if (cart.length === 0) return;
-
-    // VALIDACIÓN DE DATOS
-    const name = inputName.value.trim();
-    const phone = inputPhone.value.trim();
-    const address = inputAddress.value.trim();
-
-    if (!name || !phone || !address) {
-        alert('⚠️ Por favor, rellena tus DATOS DE ENVÍO antes de finalizar el pedido.');
-        inputName.focus();
-        return;
-    }
-
-    // CONSTRUIR MENSAJE
-    let message = `👋 Hola! Soy *${name}* y quiero hacer este pedido:\n\n`;
-    let total = 0;
-
-    cart.forEach(item => {
-        const subtotal = item.price * item.quantity;
-        total += subtotal;
-        message += `▪️ ${item.title}\n   Talla: ${item.size} | Color: ${item.color} | x${item.quantity}\n`;
-    });
-
-    message += `\n💰 *TOTAL A PAGAR: ${total.toFixed(2)}€*`;
-    message += `\n----------------------------`;
-    message += `\n📍 *DATOS DE ENVÍO:*`;
-    message += `\n👤 Nombre: ${name}`;
-    message += `\n📱 Teléfono: ${phone}`;
-    message += `\n🏠 Dirección: ${address}`;
-    message += `\n\n¿Cómo procedemos al pago? Gracias!`;
-
-    // ABRIR WHATSAPP
-    const url = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  });
-
   // 5. PAGO CON TARJETA (Stripe)
   const stripeBtn = document.getElementById('stripe-checkout-btn');
   const stripeErrorMsg = document.getElementById('stripe-error-msg');
