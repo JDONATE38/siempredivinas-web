@@ -67,6 +67,9 @@ export async function onRequestPost(context) {
       image: urlCompleta(item.image),
       unit_amount: Math.round(item.price * 100), // Stripe trabaja en céntimos
       quantity: item.quantity,
+      slug: item.slug,
+      size: item.size,
+      color: item.color,
     }));
 
     // 3. Montar la petición a la API de Stripe
