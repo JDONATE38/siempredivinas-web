@@ -19,17 +19,25 @@ export async function onRequestPost(context) {
       );
     }
 
+        // Compara texto ignorando mayúsculas/minúsculas y espacios.
+    // Se hace en JavaScript (no en SQL) porque SQLite no gestiona bien los acentos.
+    function normalize(text) {
+      return (text || "").trim().toLowerCase();
+    }
+
     // 1. Comprobar stock real en D1, combinación por combinación
     for (const item of items) {
-      const fila = await env.DB.prepare(
-        "SELECT quantity FROM stock WHERE LOWER(TRIM(product_slug)) = ? AND LOWER(TRIM(size)) = ? AND LOWER(TRIM(color)) = ?"
+      const { results } = await env.DB.prepare(
+        "SELECT size, color, quantity FROM stock WHERE LOWER(TRIM(product_slug)) = ?"
       )
-        .bind(
-          (item.slug || "").trim().toLowerCase(),
-          (item.size || "").trim().toLowerCase(),
-          (item.color || "").trim().toLowerCase()
-        )
-        .first();
+        .bind((item.slug || "").trim().toLowerCase())
+        .all();
+
+      const fila = results.find(
+        (row) =>
+          normalize(row.size) === normalize(item.size) &&
+          normalize(row.color) === normalize(item.color)
+      );
 
       if (!fila || fila.quantity < item.quantity) {
         return new Response(
