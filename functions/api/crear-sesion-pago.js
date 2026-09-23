@@ -49,11 +49,22 @@ export async function onRequestPost(context) {
       }
     }
 
+    // Convierte una ruta relativa ("/img/bolso.jpg") en una URL completa,
+    // que es lo único que Stripe acepta para las imágenes de producto.
+    function urlCompleta(ruta) {
+      if (!ruta) return null;
+      if (ruta.startsWith("http://") || ruta.startsWith("https://")) {
+        return ruta;
+      }
+      const base = "https://siempredivinas.com";
+      return ruta.startsWith("/") ? base + ruta : base + "/" + ruta;
+    }
+
     // 2. Construir los "line items" para Stripe (uno por artículo del carrito)
     const lineItems = items.map((item) => ({
       currency: "eur",
       name: `${item.title} - Talla ${item.size} - Color ${item.color}`,
-      image: item.image || null,
+      image: urlCompleta(item.image),
       unit_amount: Math.round(item.price * 100), // Stripe trabaja en céntimos
       quantity: item.quantity,
     }));
