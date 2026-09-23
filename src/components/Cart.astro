@@ -216,6 +216,45 @@
     window.open(url, '_blank');
   });
 
+  // 5. PAGO CON TARJETA (Stripe)
+  const stripeBtn = document.getElementById('stripe-checkout-btn');
+  const stripeErrorMsg = document.getElementById('stripe-error-msg');
+
+  stripeBtn.addEventListener('click', async () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.length === 0) return;
+
+    stripeErrorMsg.classList.add('hidden');
+    stripeBtn.disabled = true;
+    const originalText = stripeBtn.innerHTML;
+    stripeBtn.innerHTML = 'Comprobando disponibilidad...';
+
+    try {
+      const respuesta = await fetch('/api/crear-sesion-pago', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ items: cart }),
+      });
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok) {
+        stripeErrorMsg.textContent = datos.error || 'No se pudo procesar el pago.';
+        stripeErrorMsg.classList.remove('hidden');
+        stripeBtn.disabled = false;
+        stripeBtn.innerHTML = originalText;
+        return;
+      }
+
+      // Todo correcto: redirigir a Stripe Checkout
+      window.location.href = datos.url;
+    } catch (err) {
+      stripeErrorMsg.textContent = 'Ha ocurrido un error. Inténtalo de nuevo.';
+      stripeErrorMsg.classList.remove('hidden');
+      stripeBtn.disabled = false;
+      stripeBtn.innerHTML = originalText;
+    }
+  });
   window.addEventListener('cart-updated', renderCart);
   renderCart();
 
