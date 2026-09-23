@@ -22,7 +22,7 @@ description: >-
   ✨ Perfecto para llevar con tus looks de diario, vaqueros, vestidos o conjuntos más arreglados.
 
   Un bolso que convierte un look sencillo en un look con personalidad. 💖
-seoTitle: Bolso tachuelas charol
+seoTitle: Bolso de Hombro Mujer con Tachuelas y Detalles Metálicos – Bolso Hobo de Moda
 seoDescription: >-
   Dale un toque especial a tus looks con este elegante bolso de hombro para
   mujer con detalles metálicos, un diseño original y llamativo perfecto para
