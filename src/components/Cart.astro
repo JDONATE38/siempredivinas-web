@@ -80,12 +80,8 @@
         </div>
       `;
       cartTotalElement.innerText = '0.00€';
-      // Desactivar botón si está vacío
-      checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
       return;
     }
-    
-    checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
     cart.forEach((item) => {
       total += item.price * item.quantity;
