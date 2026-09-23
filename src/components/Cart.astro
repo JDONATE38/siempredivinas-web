@@ -194,6 +194,15 @@ window.addEventListener('toggle-cart', openCart);
     }
   });
   window.addEventListener('cart-updated', renderCart);
+
+  // Si el navegador restaura la página desde su caché (al pulsar "atrás"),
+  // volvemos a pintar el carrito para que refleje el estado real
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      renderCart();
+    }
+  });
+
   renderCart();
 
 </script>
