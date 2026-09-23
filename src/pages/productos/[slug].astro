@@ -421,6 +421,7 @@ const isLastUnits = stockStatus === 'Últimas Unidades';
 
           const cartItem = {
               id: entry.slug + '-' + sizeValue + '-' + colorValue,
+              slug: entry.slug,
               title: entry.data.title,
               price: entry.data.price,
               image: entry.data.image,
