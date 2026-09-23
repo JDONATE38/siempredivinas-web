@@ -64,7 +64,17 @@
     }, 300);
   }
 
-  window.addEventListener('toggle-cart', openCart);
+  window.addEventListener('cart-updated', renderCart);
+
+  // Si el navegador restaura la página desde su caché (al pulsar "atrás"),
+  // volvemos a pintar el carrito para que refleje el estado real
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      renderCart();
+    }
+  });
+
+  renderCart();
   closeBtn.addEventListener('click', closeCart);
   document.getElementById('seguir-comprando-btn')?.addEventListener('click', closeCart);
   cartOverlay.addEventListener('click', closeCart);
