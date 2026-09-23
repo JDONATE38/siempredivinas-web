@@ -91,6 +91,9 @@ export async function onRequestPost(context) {
       if (li.image) {
         params.append(`line_items[${i}][price_data][product_data][images][0]`, li.image);
       }
+      params.append(`line_items[${i}][price_data][product_data][metadata][slug]`, li.slug);
+      params.append(`line_items[${i}][price_data][product_data][metadata][size]`, li.size);
+      params.append(`line_items[${i}][price_data][product_data][metadata][color]`, li.color);
       params.append(`line_items[${i}][price_data][unit_amount]`, String(li.unit_amount));
       params.append(`line_items[${i}][quantity]`, String(li.quantity));
     });
