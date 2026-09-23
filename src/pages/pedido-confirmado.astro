@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="¡Pedido confirmado! | Siempre Divinas" description="Gracias por tu compra en Siempre Divinas.">
+  <main class="container mx-auto px-4 py-20 text-center">
+    <div class="max-w-lg mx-auto">
+      <div class="text-6xl mb-6">✅</div>
+      <h1 class="text-3xl font-serif font-bold text-gray-900 mb-4">
+        ¡Gracias por tu pedido!
+      </h1>
+      <p class="text-gray-600 mb-8">
+        Hemos recibido tu pago correctamente. Te enviaremos un email de confirmación
+        con los detalles de tu compra y te avisaremos en cuanto salga hacia tu dirección de envío.
+      </p>
+      <a href="/" class="inline-block bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full transition">
+        Volver a la tienda
+      </a>
+    </div>
+  </main>
+
+  <script is:inline>
+    // Al llegar aquí el pago se ha completado, así que vaciamos el carrito
+    localStorage.removeItem('cart');
+    window.dispatchEvent(new Event('cart-updated'));
+  </script>
+</Layout>
