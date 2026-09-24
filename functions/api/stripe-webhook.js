@@ -119,14 +119,15 @@ export async function onRequestPost(context) {
       }
     }
 
-    // Guardar el pedido en la tabla "orders"
+        // Guardar el pedido en la tabla "orders"
     await env.DB.prepare(
-      `INSERT INTO orders (stripe_session_id, customer_email, items_json, total_amount, created_at)
-       VALUES (?, ?, ?, ?, ?)`
+      `INSERT INTO orders (stripe_session_id, customer_email, customer_phone, items_json, total_amount, created_at)
+       VALUES (?, ?, ?, ?, ?, ?)`
     )
       .bind(
         session.id,
         session.customer_details?.email || null,
+        session.customer_details?.phone || null,
         JSON.stringify(items),
         (session.amount_total || 0) / 100,
         new Date().toISOString()
