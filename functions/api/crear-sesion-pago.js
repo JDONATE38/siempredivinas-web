@@ -82,6 +82,7 @@ export async function onRequestPost(context) {
     params.append("cancel_url", "https://siempredivinas.com/");
     // Solo pedimos dirección de envío, sin dirección de facturación aparte
     params.append("shipping_address_collection[allowed_countries][]", "ES");
+    params.append("phone_number_collection[enabled]", "true");
     const GASTOS_ENVIO_CENTIMOS = 495; // 4,95€ — cambia este número si quieres otro precio
     params.append("shipping_options[0][shipping_rate_data][type]", "fixed_amount");
     params.append("shipping_options[0][shipping_rate_data][fixed_amount][amount]", String(GASTOS_ENVIO_CENTIMOS));
