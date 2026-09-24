@@ -11,7 +11,7 @@ gallery1: /img/1000360907.webp
 gallery2: /img/1000360909.webp
 gallery3: /img/1000360908.webp
 sizes: "Única "
-colors: Rosa, Verde, Gris
+colors: Rosa, Verde, Gris.
 description: >-
   Jersey de punto con cuello alto para mujer, un básico imprescindible para la
   temporada de otoño-invierno. Su diseño de cuello vuelto aporta un extra de
