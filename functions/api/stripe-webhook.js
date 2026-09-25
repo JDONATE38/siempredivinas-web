@@ -56,8 +56,7 @@ async function enviarEmailPedido(env, session, items) {
        ${direccion.state ? direccion.state + ", " : ""}${direccion.country || ""}`
     : "No especificada";
 
-  const nombreCliente = session.shipping_details?.name || session.customer_details?.name || "No especificado";
-
+  const nombreCliente = session.collected_information?.shipping_details?.name || session.customer_details?.name || "No especificado";
   const filasProductos = items
     .map(
       (item) => `
