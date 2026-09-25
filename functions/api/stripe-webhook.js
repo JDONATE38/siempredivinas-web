@@ -48,7 +48,7 @@ async function verificarFirma(payload, cabeceraFirma, secreto) {
 // qué hacer (en nuestro caso, solo lo registramos en los logs, sin que
 // afecte al resto del webhook).
 async function enviarEmailPedido(env, session, items) {
-  const direccion = session.shipping_details?.address;
+  const direccion = session.collected_information?.shipping_details?.address;
 
   const direccionTexto = direccion
     ? `${direccion.line1 || ""}${direccion.line2 ? ", " + direccion.line2 : ""}<br>
