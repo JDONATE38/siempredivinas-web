@@ -2,7 +2,8 @@
 //
 // Stripe llama a esta URL directamente (servidor a servidor) cuando un pago
 // se completa. Aquí comprobamos que el aviso es auténtico, descontamos el
-// stock real en D1 y guardamos el pedido en la tabla "orders".
+// stock real en D1, guardamos el pedido en la tabla "orders" y avisamos
+// por email a la propietaria con el detalle del pedido.
 
 // Compara texto ignorando mayúsculas/minúsculas y espacios (igual que en crear-sesion-pago.js)
 function normalize(text) {
@@ -40,6 +41,94 @@ async function verificarFirma(payload, cabeceraFirma, secreto) {
     .join("");
 
   return firmaCalculada === firmaRecibida;
+}
+
+// Arma el HTML del email y lo envía a través de la API de Resend.
+// Si algo falla aquí, lanzamos el error para que quien nos llama decida
+// qué hacer (en nuestro caso, solo lo registramos en los logs, sin que
+// afecte al resto del webhook).
+async function enviarEmailPedido(env, session, items) {
+  const direccion = session.shipping_details?.address;
+
+  const direccionTexto = direccion
+    ? `${direccion.line1 || ""}${direccion.line2 ? ", " + direccion.line2 : ""}<br>
+       ${direccion.postal_code || ""} ${direccion.city || ""}<br>
+       ${direccion.state ? direccion.state + ", " : ""}${direccion.country || ""}`
+    : "No especificada";
+
+  const nombreCliente = session.shipping_details?.name || session.customer_details?.name || "No especificado";
+
+  const filasProductos = items
+    .map(
+      (item) => `
+        <tr>
+          <td style="padding:6px 10px;border:1px solid #ddd;">${item.title}</td>
+          <td style="padding:6px 10px;border:1px solid #ddd;">${item.size || "-"}</td>
+          <td style="padding:6px 10px;border:1px solid #ddd;">${item.color || "-"}</td>
+          <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">${item.quantity}</td>
+        </tr>`
+    )
+    .join("");
+
+  const totalTexto = ((session.amount_total || 0) / 100).toFixed(2).replace(".", ",");
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+      <h2 style="color:#333;">🛍️ Nuevo pedido en Siempre Divinas</h2>
+
+      <h3 style="margin-bottom:4px;">Datos del cliente</h3>
+      <p style="margin-top:0;">
+        <strong>Nombre:</strong> ${nombreCliente}<br>
+        <strong>Email:</strong> ${session.customer_details?.email || "No especificado"}<br>
+        <strong>Teléfono:</strong> ${session.customer_details?.phone || "No especificado"}
+      </p>
+
+      <h3 style="margin-bottom:4px;">Dirección de envío</h3>
+      <p style="margin-top:0;">${direccionTexto}</p>
+
+      <h3 style="margin-bottom:4px;">Productos</h3>
+      <table style="border-collapse:collapse;width:100%;">
+        <thead>
+          <tr style="background:#f5f5f5;">
+            <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">Producto</th>
+            <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">Talla</th>
+            <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">Color</th>
+            <th style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filasProductos}
+        </tbody>
+      </table>
+
+      <p style="font-size:18px;margin-top:16px;">
+        <strong>Total pagado: ${totalTexto} €</strong>
+      </p>
+
+      <p style="color:#888;font-size:12px;margin-top:24px;">
+        ID de sesión de Stripe: ${session.id}
+      </p>
+    </div>
+  `;
+
+  const respuesta = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Siempre Divinas <pedidos@siempredivinas.com>",
+      to: "siempredivinas.pedidos@gmail.com",
+      subject: `Nuevo pedido — ${totalTexto} €`,
+      html,
+    }),
+  });
+
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text();
+    throw new Error(`Resend respondió con error: ${respuesta.status} ${detalle}`);
+  }
 }
 
 export async function onRequestPost(context) {
@@ -119,7 +208,7 @@ export async function onRequestPost(context) {
       }
     }
 
-        // Guardar el pedido en la tabla "orders"
+    // Guardar el pedido en la tabla "orders"
     await env.DB.prepare(
       `INSERT INTO orders (stripe_session_id, customer_email, customer_phone, items_json, total_amount, created_at)
        VALUES (?, ?, ?, ?, ?, ?)`
@@ -133,6 +222,15 @@ export async function onRequestPost(context) {
         new Date().toISOString()
       )
       .run();
+
+    // Enviar el email de aviso a la propietaria. Si falla, lo registramos
+    // en los logs pero NO hacemos que el webhook falle: el pedido y el
+    // stock ya están guardados correctamente en cualquier caso.
+    try {
+      await enviarEmailPedido(env, session, items);
+    } catch (errorEmail) {
+      console.log("Error enviando el email de aviso del pedido:", errorEmail);
+    }
 
     return new Response("OK", { status: 200 });
   } catch (err) {
