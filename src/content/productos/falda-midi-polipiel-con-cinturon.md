@@ -3,6 +3,8 @@ title: "Falda midi polipiel con cinturón "
 price: 22
 category:
   - ROPA
+subcategory:
+  - FALDAS
 stockStatus: En Stock
 image: /img/1000358802.webp
 gallery1: /img/1000358813.webp
