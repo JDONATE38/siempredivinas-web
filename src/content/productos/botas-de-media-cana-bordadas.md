@@ -5,8 +5,7 @@ price: 23
 category:
   - CALZADO
   - NOVEDADES
-subcategory:
-  - BOTAS
+subcategory: []
 stockStatus: En Stock
 image: /img/1000354736.webp
 gallery1: /img/1000355082.webp
