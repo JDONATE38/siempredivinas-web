@@ -7,7 +7,7 @@ category:
   - NOVEDADES
 subcategory:
   - BOTAS
-stockStatus: En Stock
+stockStatus: Agotado
 image: /img/1000354736.webp
 gallery1: /img/1000355082.webp
 gallery2: /img/1000355066.webp
