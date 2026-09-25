@@ -10,7 +10,7 @@ image: /img/1000361115.webp
 gallery1: /img/1000361127.webp
 gallery2: /img/1000361129.webp
 gallery3: /img/1000361128.webp
-sizes: "Talla única "
+sizes: Única
 colors: "Chica Gafas, Chica Flores, Chica Café, Chica Torreifel "
 description: >-
   Dale un toque diferente a tus looks con esta original camiseta estampada de
