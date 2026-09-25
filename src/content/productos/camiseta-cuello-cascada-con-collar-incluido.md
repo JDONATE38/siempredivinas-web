@@ -3,6 +3,8 @@ title: "Camiseta cuello cascada con collar incluido "
 price: 15
 category:
   - ROPA
+subcategory:
+  - CAMISETAS
 stockStatus: En Stock
 image: /img/1000355762.webp
 gallery1: /img/1000355763.webp
